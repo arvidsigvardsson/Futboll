@@ -17,6 +17,7 @@
 @property CGPoint originalBallPosition;
 @property CGPoint oldBallPosition;
 @property (nonatomic) SKSpriteNode *goal;
+@property (nonatomic) SKShapeNode *goalRegistrationNode;
 
 @end
 
@@ -41,7 +42,7 @@
         // initiera en boll
         self.ball = [SKSpriteNode spriteNodeWithImageNamed:@"football"];
         self.ball.position = CGPointMake(50.0f, 50.0f);
-        self.ball.xScale = 0.15f;
+        self.ball.xScale = 0.75f;
         self.ball.yScale = self.ball.xScale;
         [self.ball setName:@"Ball"];
         
@@ -56,28 +57,54 @@
         [self addChild:_ball];
         
         
-        
-//        self.goal = [SKSpriteNode spriteNodeWithImageNamed:@"goal"];
-//        _goal.xScale = 0.75f;
-//        _goal.yScale = _goal.xScale;
-//        
-//        _goal.position = CGPointMake(150.0f, 400.0f);
-//        
-//        [self addChild:_goal];
+
         
         // hållare för målet, skall inkludera en bild av målet, samt ett antal child nodes med physicsbodies för att simulera ett mål
-        SKSpriteNode *goalContainer = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0 green:0 blue:1.0f alpha:0.1f] size:CGSizeMake(180, 50)];
-        goalContainer.position = CGPointMake(160.0f, 300.0f);
+        
+        float alphaOfGoalNodes = 0.0f; // testing
+        
+        SKSpriteNode *goalContainer = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0 green:0 blue:1.0f alpha:0.0f] size:CGSizeMake(150, 50)];
+        goalContainer.position = CGPointMake(160.0f, 400.0f);
         [self addChild:goalContainer];
         
         // målgrafiken
+        
         SKSpriteNode *goalImageSprite = [SKSpriteNode spriteNodeWithImageNamed:@"goal"];
-        goalImageSprite.xScale = 0.75f;
+        goalImageSprite.xScale = 0.65f;
         goalImageSprite.yScale = goalImageSprite.xScale;
         [goalContainer addChild:goalImageSprite];
         
+        // noder för stolpar
+        SKShapeNode *leftGoalPost = [[SKShapeNode alloc] init];
+        leftGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(-75.0f, -25.0f, 30.0f, 50.0f), 5.0, 5.0, nil);
+        leftGoalPost.fillColor = [SKColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:alphaOfGoalNodes];
+        leftGoalPost.lineWidth = 0.0f;
+//        leftGoalPost.position = CGPointMake(-75.0, -25.0);
+        leftGoalPost.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:leftGoalPost.path];
+        [goalContainer addChild:leftGoalPost];
         
+        SKShapeNode *rightGoalPost = [[SKShapeNode alloc] init];
+        rightGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(75.0-30.0f, -25.0f, 30.0f, 50.0f), 5.0, 5.0, nil);
+        rightGoalPost.fillColor = [SKColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:alphaOfGoalNodes];
+        rightGoalPost.lineWidth = 0.0f;
+//        rightGoalPost.position = CGPointMake(75.0-30.0, -25.0);
+        rightGoalPost.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:rightGoalPost.path];
+        [goalContainer addChild:rightGoalPost];
         
+        // bakdelen av målet
+        SKShapeNode *backOfGoal = [[SKShapeNode alloc] init];
+        backOfGoal.path = CGPathCreateWithRoundedRect(CGRectMake(-75.0f, 25.0f - 10.0f, 150.0f, 10.0f), 5.0f, 5.0f, nil);
+        backOfGoal.fillColor = [SKColor colorWithRed:0.0f green:1.0f blue:0.0f alpha:alphaOfGoalNodes];
+        backOfGoal.lineWidth = 0.0f;
+        backOfGoal.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:backOfGoal.path];
+        [goalContainer addChild:backOfGoal];
+        
+        // node som registrerar att bollen gått i mål, är en property då den används i updatemetoden
+        self.goalRegistrationNode = [[SKShapeNode alloc] init];
+        self.goalRegistrationNode.path = CGPathCreateWithRect(CGRectMake(-45.0f, 13.0f, 90.0f, 2.0f), nil);
+        self.goalRegistrationNode.fillColor = [SKColor colorWithRed:1.0f green:1.0f blue:0.0f alpha:alphaOfGoalNodes];
+        self.goalRegistrationNode.lineWidth = 0.0f;
+        [goalContainer addChild:self.goalRegistrationNode];
         
         
     }
@@ -91,50 +118,6 @@
 	
 }
 
-//-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-//    UITouch *touch = [touches anyObject];
-//    CGPoint location = [touch locationInNode:self];
-//
-//    //    NSLog(@"x = %f y = %f", location.x, location.y);
-//    
-//    SKSpriteNode *touchedNode = (SKSpriteNode *)[self nodeAtPoint:location];
-//    NSLog(@"Noden är %@", touchedNode.name);
-//    if ([touchedNode.name  isEqual: @"Ball"]) {
-//        SKAction *moveAction = [SKAction moveTo:location duration:0];
-//        [touchedNode runAction:moveAction];
-//    }
-//}
-//
-//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    /* Called when a touch begins */
-//    
-//    UITouch *touch = [touches anyObject];
-//    CGPoint location = [touch locationInNode:self];
-//
-////    NSLog(@"x = %f y = %f", location.x, location.y);
-//    
-//    SKSpriteNode *touchedNode = (SKSpriteNode *)[self nodeAtPoint:location];
-////    NSLog(@"Noden är %@", touchedNode.name);
-//    if ([touchedNode.name  isEqual: @"Ball"]) {
-//        [touchedNode.physicsBody applyImpulse:CGVectorMake(50.0f, 100.0f)];
-//    }
-//    
-//    
-////    for (UITouch *touch in touches) {
-////        CGPoint location = [touch locationInNode:self];
-////        
-////        SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithImageNamed:@"Spaceship"];
-////        
-////        sprite.position = location;
-////        
-////        SKAction *action = [SKAction rotateByAngle:M_PI duration:1];
-////        
-////        [sprite runAction:[SKAction repeatActionForever:action]];
-////        
-////        [self addChild:sprite];
-////    }
-//}
-//
 
 -(void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
@@ -149,27 +132,6 @@
         }
         
     }
-//    else if (recognizer.state == UIGestureRecognizerStateChanged && self.ballIsSelected) {
-//        CGPoint touchLocation = [recognizer locationInView:recognizer.view];
-//        touchLocation = CGPointMake(touchLocation.x, self.view.bounds.size.height-touchLocation.y);
-//        NSLog(@"x = %f y = %f", touchLocation.x, touchLocation.y);
-//        SKAction *moveAction = [SKAction moveTo:touchLocation duration:0];
-//        [self.ball runAction:moveAction];
-//        
-//
-//        
-//        CGPoint translation = [recognizer translationInView:self.view];
-//        translation = CGPointMake(translation.x, -translation.y);
-//        NSLog(@"");
-//        SKAction *moveAction = [SKAction moveByX:translation.x y:translation.y duration:0];
-//        
-//        CGPoint location = [recognizer.]
-//        [self.ball runAction:moveAction];
-//    
-//    
-////    
-////
-//    }
 
     else if (recognizer.state == UIGestureRecognizerStateEnded && self.ballIsSelected) {
         self.ballIsSelected = NO;
@@ -179,51 +141,16 @@
     }
 }
 
-//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    UITouch *touch = [touches anyObject];
-//    CGPoint location = [touch locationInNode:self];
-//    if ([self.ball containsPoint:location]) {
-////        NSLog(@"Bollen är rörd");
-//        self.ballIsSelected = YES;
-//    }
-//
-//}
-//
-//
-//-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-//    UITouch *touch = [touches anyObject];
-//    CGPoint location = [touch locationInNode:self];
-//    
-//    if (self.ballIsSelected){
-//        self.oldBallPosition = location;
-//        
-//        self.ball.physicsBody.velocity = CGVectorMake(0, 0);
-//        
-//        SKAction *moveAction = [SKAction moveTo:location duration:0];
-//        [self.ball runAction:moveAction];
-//    }
-//}
-//
-//-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-//    UITouch *touch = [touches anyObject];
-//    CGPoint location = [touch locationInNode:self];
-//    
-//    self.ballIsSelected = NO;
-//    
-//    CGVector ballImpulseVector = CGVectorMake(location.x - self.oldBallPosition.x, location.y - self.oldBallPosition.y);
-//    NSLog(@"impulseVector = %f   %f", ballImpulseVector.dx, ballImpulseVector.dy);
-//    [self.ball.physicsBody applyImpulse:ballImpulseVector];
-//    
-//}
 
 
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
     
-//    if ([self.ball intersectsNode:self.goal]) {
+    if ([self.ball intersectsNode:self.goalRegistrationNode]) {
 //        NSLog(@"Mål!");
-//    }
+        self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
+    }
     
 }
 
