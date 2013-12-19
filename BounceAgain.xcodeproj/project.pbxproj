@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7157A7BF18633D42005ECAD6 /* Goal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7157A7BE18633D42005ECAD6 /* Goal@2x.png */; };
 		7187CC36185F19E000DFAE14 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7187CC35185F19E000DFAE14 /* Foundation.framework */; };
 		7187CC38185F19E000DFAE14 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7187CC37185F19E000DFAE14 /* CoreGraphics.framework */; };
 		7187CC3A185F19E000DFAE14 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7187CC39185F19E000DFAE14 /* UIKit.framework */; };
@@ -25,6 +26,7 @@
 		7187CC61185F19E100DFAE14 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7187CC39185F19E000DFAE14 /* UIKit.framework */; };
 		7187CC69185F19E100DFAE14 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7187CC67185F19E100DFAE14 /* InfoPlist.strings */; };
 		7187CC6B185F19E100DFAE14 /* BounceAgainTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7187CC6A185F19E100DFAE14 /* BounceAgainTests.m */; };
+		7187CC75185F24C700DFAE14 /* football@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7187CC74185F24C700DFAE14 /* football@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7157A7BE18633D42005ECAD6 /* Goal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Goal@2x.png"; sourceTree = "<group>"; };
 		7187CC32185F19E000DFAE14 /* BounceAgain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BounceAgain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7187CC35185F19E000DFAE14 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7187CC37185F19E000DFAE14 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -62,6 +65,7 @@
 		7187CC66185F19E100DFAE14 /* BounceAgainTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BounceAgainTests-Info.plist"; sourceTree = "<group>"; };
 		7187CC68185F19E100DFAE14 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7187CC6A185F19E100DFAE14 /* BounceAgainTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BounceAgainTests.m; sourceTree = "<group>"; };
+		7187CC74185F24C700DFAE14 /* football@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "football@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +132,8 @@
 				7187CC49185F19E000DFAE14 /* Main_iPhone.storyboard */,
 				7187CC4C185F19E000DFAE14 /* Main_iPad.storyboard */,
 				7187CC4F185F19E000DFAE14 /* ViewController.h */,
+				7157A7BE18633D42005ECAD6 /* Goal@2x.png */,
+				7187CC74185F24C700DFAE14 /* football@2x.png */,
 				7187CC50185F19E000DFAE14 /* ViewController.m */,
 				7187CC52185F19E000DFAE14 /* MyScene.h */,
 				7187CC53185F19E000DFAE14 /* MyScene.m */,
@@ -243,11 +249,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7157A7BF18633D42005ECAD6 /* Goal@2x.png in Resources */,
 				7187CC56185F19E000DFAE14 /* Spaceship.png in Resources */,
 				7187CC58185F19E000DFAE14 /* Images.xcassets in Resources */,
 				7187CC4E185F19E000DFAE14 /* Main_iPad.storyboard in Resources */,
 				7187CC4B185F19E000DFAE14 /* Main_iPhone.storyboard in Resources */,
 				7187CC42185F19E000DFAE14 /* InfoPlist.strings in Resources */,
+				7187CC75185F24C700DFAE14 /* football@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,6 +498,7 @@
 				7187CC70185F19E100DFAE14 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7187CC71185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "BounceAgainTests" */ = {
 			isa = XCConfigurationList;
@@ -498,6 +507,7 @@
 				7187CC73185F19E100DFAE14 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
