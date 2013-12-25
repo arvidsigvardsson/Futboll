@@ -80,15 +80,16 @@
         self.physicsBody.friction = 0.0f;
         
         // initiera en boll
-        self.ball = [SKSpriteNode spriteNodeWithImageNamed:@"football"];
+        self.ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
 //        self.ball.position = CGPointMake(50.0f, 50.0f);
-        self.ball.xScale = 0.75f;
-        self.ball.yScale = self.ball.xScale;
+//        self.ball.xScale = 0.75f;
+//        self.ball.yScale = self.ball.xScale;
         self.ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
         [self.ball setName:@"Ball"];
         
         // ge bollen en physicsbody
-        self.ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_ball.frame.size.height / 2];
+        self.ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:23.0f];
+//        self.ball.physicsBody = [SKPhysicsBody bo]
         self.ball.physicsBody.dynamic = YES;
         self.ball.physicsBody.affectedByGravity = NO;
         
@@ -211,7 +212,7 @@
 
 -(void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        CGPoint touchLocation = [recognizer locationInView:recognizer.view];
+        CGPoint touchLocation = [recognizer locationInView:self.view];
         
         touchLocation = [self convertPointFromView:touchLocation];
         if ([self.ball containsPoint:touchLocation]) {
@@ -240,6 +241,13 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSLog(@"TouchesBegan-metoden");
+    
+    UITouch *touch = [touches anyObject];
+    CGPoint location = [touch locationInView:self.view];
+    
+    if ([self.ball containsPoint:location]) {
+        self.ballIsSelected = YES;
+    }
 }
 
 
