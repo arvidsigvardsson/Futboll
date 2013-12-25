@@ -15,16 +15,15 @@
 
 @interface MyScene ()
 
-@property (nonatomic) SKSpriteNode *ball;
-@property BOOL ballIsSelected;
-//@property float ballOriginalX;
-//@property float ballOriginalY;
-@property CGPoint originalBallPosition;
-@property CGPoint oldBallPosition;
-@property (nonatomic) SKSpriteNode *goal;
-@property (nonatomic) SKShapeNode *goalRegistrationNode;
-@property (nonatomic) SKSpriteNode *spikesNode;
-@property (nonatomic) SKSpriteNode *defender;
+@property (nonatomic) SKSpriteNode       *ball;
+@property BOOL                          ballIsSelected;
+@property CGPoint                      originalBallPosition;
+@property CGPoint                      oldBallPosition;
+@property (nonatomic) SKSpriteNode       *goal;
+@property (nonatomic) SKShapeNode        *goalRegistrationNode;
+@property (nonatomic) SKSpriteNode       *spikesNode;
+@property (nonatomic) SKSpriteNode       *defender;
+@property (nonatomic) SKShapeNode        *ballHolder;
 
 @end
 
@@ -68,6 +67,13 @@
         midlineNode.lineWidth = 5.0f;
         [self addChild:midlineNode];
         
+        // sidlinjer
+        SKShapeNode *sidelinesNode = [[SKShapeNode alloc] init];
+        sidelinesNode.path = CGPathCreateWithRect(CGRectMake(0.0f, 0.0f, self.frame.size.width, self.frame.size.height), Nil);
+        sidelinesNode.lineWidth = 10.0f;
+        [self addChild:sidelinesNode];
+        
+        
         
         
         // skapa spelyta, hela skärmen, ingen gravitation
@@ -79,18 +85,38 @@
         // friktion, ************  ska nog ändras ********************
         self.physicsBody.friction = 0.0f;
         
+        
         // initiera en boll
-        self.ball = [SKSpriteNode spriteNodeWithImageNamed:@"football"];
+        self.ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
 //        self.ball.position = CGPointMake(50.0f, 50.0f);
-        self.ball.xScale = 0.75f;
+        self.ball.xScale = 0.5f;
         self.ball.yScale = self.ball.xScale;
         self.ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
         [self.ball setName:@"Ball"];
+        NSLog(@"boll width = %f", self.ball.frame.size.width);
         
         // ge bollen en physicsbody
-        self.ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:_ball.frame.size.height / 2];
+        self.ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:20.0f]; //_ball.frame.size.height / 2];
         self.ball.physicsBody.dynamic = YES;
         self.ball.physicsBody.affectedByGravity = NO;
+        
+        
+        /*
+        // initiera en hållare för bollen samt en boll
+        CGMutablePathRef ballHolderPath = CGPathCreateMutable();
+        CGPathAddArc(ballHolderPath, nil, 50.0f, 50.0f, 30.0f, 0.0f, 2.0f * M_PI, 1);
+        
+        self.ballHolder = [[SKShapeNode alloc] init];
+        self.ballHolder.path = ballHolderPath;
+        
+        self.ball = [SKSpriteNode spriteNodeWithImageNamed:@"newFootball"];
+        [self.ballHolder addChild:self.ball];
+//        self.ball.position = CGPointMake(0.0f, 0.0f);
+        
+        
+        [self addChild:self.ballHolder];
+        */
+        
         
         // bollen är ej ännu selected
         self.ballIsSelected = NO;
@@ -102,22 +128,23 @@
         
         // hållare för målet, skall inkludera en bild av målet, samt ett antal child nodes med physicsbodies för att simulera ett mål
         
-        float alphaOfGoalNodes = 0.0f; // testing
+        float alphaOfGoalNodes = 0.5f; // testing
+        
 //        self.frame.size.height
-        SKSpriteNode *goalContainer = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0 green:0 blue:1.0f alpha:0.0f] size:CGSizeMake(150, 50)];
-        goalContainer.position = CGPointMake(160.0f, self.frame.size.height - 50);
+        SKSpriteNode *goalContainer = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0 green:1 blue:1.0f alpha:alphaOfGoalNodes] size:CGSizeMake(150, 50)];
+        goalContainer.position = CGPointMake(self.frame.size.width / 2.0f, self.frame.size.height - 35.0f);
         [self addChild:goalContainer];
         
         // målgrafiken
         
-        SKSpriteNode *goalImageSprite = [SKSpriteNode spriteNodeWithImageNamed:@"goal"];
-        goalImageSprite.xScale = 0.65f;
+        SKSpriteNode *goalImageSprite = [SKSpriteNode spriteNodeWithImageNamed:@"goalBW"];
+        goalImageSprite.xScale = 0.85f;
         goalImageSprite.yScale = goalImageSprite.xScale;
         [goalContainer addChild:goalImageSprite];
         
         // noder för stolpar
         SKShapeNode *leftGoalPost = [[SKShapeNode alloc] init];
-        leftGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(-75.0f, -25.0f, 30.0f, 50.0f), 5.0, 5.0, nil);
+        leftGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(-75.0f, -25.0f, 20.0f, 50.0f), 5.0, 5.0, nil);
         leftGoalPost.fillColor = [SKColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:alphaOfGoalNodes];
         leftGoalPost.lineWidth = 0.0f;
 //        leftGoalPost.position = CGPointMake(-75.0, -25.0);
@@ -125,7 +152,7 @@
         [goalContainer addChild:leftGoalPost];
         
         SKShapeNode *rightGoalPost = [[SKShapeNode alloc] init];
-        rightGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(75.0-30.0f, -25.0f, 30.0f, 50.0f), 5.0, 5.0, nil);
+        rightGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(75.0 - 20.0f, -25.0f, 20.0f, 50.0f), 5.0, 5.0, nil);
         rightGoalPost.fillColor = [SKColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:alphaOfGoalNodes];
         rightGoalPost.lineWidth = 0.0f;
 //        rightGoalPost.position = CGPointMake(75.0-30.0, -25.0);
@@ -174,6 +201,7 @@
 
 // metod för start av omgång
 -(void)beginRound {
+    
     NSLog(@"beginRound");
     
     // initera bollen i nedre målområdet
@@ -184,6 +212,7 @@
     self.ball.alpha = 1.0f;
     self.ball.physicsBody.angularVelocity = 0.0f;
     self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
+    
 }
 
 
@@ -217,7 +246,7 @@
         if ([self.ball containsPoint:touchLocation]) {
             NSLog(@"Ball is touched");
             self.ballIsSelected = YES;
-            self.originalBallPosition = touchLocation;
+//            self.originalBallPosition = touchLocation;
             
         }
         
@@ -238,9 +267,9 @@
 
 
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"TouchesBegan-metoden");
-}
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//    NSLog(@"TouchesBegan-metoden");
+//}
 
 
 -(void)update:(CFTimeInterval)currentTime {
