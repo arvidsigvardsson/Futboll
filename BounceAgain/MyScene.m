@@ -23,8 +23,10 @@
 @property CGPoint oldBallPosition;
 @property (nonatomic) SKSpriteNode *goal;
 @property (nonatomic) SKShapeNode *goalRegistrationNode;
+@property (nonatomic) SKSpriteNode *ballRegistrationNode;
 @property (nonatomic) SKSpriteNode *spikesNode;
 @property (nonatomic) SKSpriteNode *defender;
+
 
 @end
 
@@ -68,6 +70,11 @@
         midlineNode.lineWidth = 5.0f;
         [self addChild:midlineNode];
         
+        // sid- och baslinjer
+        SKShapeNode *sidelines = [[SKShapeNode alloc] init];
+        sidelines.path = CGPathCreateWithRect(self.frame, nil);
+        sidelines.lineWidth = 10.0f;
+        [self addChild:sidelines];
         
         
         // skapa spelyta, hela skärmen, ingen gravitation
@@ -82,8 +89,8 @@
         // initiera en boll
         self.ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
 //        self.ball.position = CGPointMake(50.0f, 50.0f);
-//        self.ball.xScale = 0.75f;
-//        self.ball.yScale = self.ball.xScale;
+        self.ball.xScale = 0.75f;
+        self.ball.yScale = self.ball.xScale;
         self.ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
         [self.ball setName:@"Ball"];
         
@@ -92,6 +99,13 @@
 //        self.ball.physicsBody = [SKPhysicsBody bo]
         self.ball.physicsBody.dynamic = YES;
         self.ball.physicsBody.affectedByGravity = NO;
+        
+        // nod för att detektera mål
+        self.ballRegistrationNode = [SKSpriteNode spriteNodeWithImageNamed:@"newFootball"];
+        self.ballRegistrationNode.alpha = 0.0f;
+        self.ballRegistrationNode.xScale = 0.5f;
+        self.ballRegistrationNode.yScale = self.ballRegistrationNode.xScale;
+        [self.ball addChild:self.ballRegistrationNode];
         
         // bollen är ej ännu selected
         self.ballIsSelected = NO;
@@ -104,21 +118,22 @@
         // hållare för målet, skall inkludera en bild av målet, samt ett antal child nodes med physicsbodies för att simulera ett mål
         
         float alphaOfGoalNodes = 0.0f; // testing
+        
 //        self.frame.size.height
-        SKSpriteNode *goalContainer = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0 green:0 blue:1.0f alpha:0.0f] size:CGSizeMake(150, 50)];
-        goalContainer.position = CGPointMake(160.0f, self.frame.size.height - 50);
+        SKSpriteNode *goalContainer = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0 green:0 blue:1.0f alpha:0.0f] size:CGSizeMake(150, 100)];
+        goalContainer.position = CGPointMake(self.frame.size.width / 2.0f, self.frame.size.height - 30);
         [self addChild:goalContainer];
         
         // målgrafiken
         
-        SKSpriteNode *goalImageSprite = [SKSpriteNode spriteNodeWithImageNamed:@"goal"];
+        SKSpriteNode *goalImageSprite = [SKSpriteNode spriteNodeWithImageNamed:@"goalBW"];
         goalImageSprite.xScale = 0.65f;
         goalImageSprite.yScale = goalImageSprite.xScale;
         [goalContainer addChild:goalImageSprite];
         
         // noder för stolpar
         SKShapeNode *leftGoalPost = [[SKShapeNode alloc] init];
-        leftGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(-75.0f, -25.0f, 30.0f, 50.0f), 5.0, 5.0, nil);
+        leftGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(-70.0f, -25.0f, 15.0f, 50.0f), 5.0, 5.0, nil);
         leftGoalPost.fillColor = [SKColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:alphaOfGoalNodes];
         leftGoalPost.lineWidth = 0.0f;
 //        leftGoalPost.position = CGPointMake(-75.0, -25.0);
@@ -126,24 +141,16 @@
         [goalContainer addChild:leftGoalPost];
         
         SKShapeNode *rightGoalPost = [[SKShapeNode alloc] init];
-        rightGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(75.0-30.0f, -25.0f, 30.0f, 50.0f), 5.0, 5.0, nil);
+        rightGoalPost.path = CGPathCreateWithRoundedRect(CGRectMake(75.0 - 20.0f, -25.0f, 15.0f, 50.0f), 5.0, 5.0, nil);
         rightGoalPost.fillColor = [SKColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:alphaOfGoalNodes];
         rightGoalPost.lineWidth = 0.0f;
 //        rightGoalPost.position = CGPointMake(75.0-30.0, -25.0);
         rightGoalPost.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:rightGoalPost.path];
         [goalContainer addChild:rightGoalPost];
         
-        // bakdelen av målet
-        SKShapeNode *backOfGoal = [[SKShapeNode alloc] init];
-        backOfGoal.path = CGPathCreateWithRoundedRect(CGRectMake(-75.0f, 25.0f - 10.0f, 150.0f, 10.0f), 5.0f, 5.0f, nil);
-        backOfGoal.fillColor = [SKColor colorWithRed:0.0f green:1.0f blue:0.0f alpha:alphaOfGoalNodes];
-        backOfGoal.lineWidth = 0.0f;
-        backOfGoal.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:backOfGoal.path];
-        [goalContainer addChild:backOfGoal];
-        
         // node som registrerar att bollen gått i mål, är en property då den används i updatemetoden
         self.goalRegistrationNode = [[SKShapeNode alloc] init];
-        self.goalRegistrationNode.path = CGPathCreateWithRect(CGRectMake(-45.0f, 13.0f, 90.0f, 2.0f), nil);
+        self.goalRegistrationNode.path = CGPathCreateWithRect(CGRectMake(-75.0f, 75.0f, 150.0f, 20.0f), nil);
         self.goalRegistrationNode.fillColor = [SKColor colorWithRed:1.0f green:1.0f blue:0.0f alpha:alphaOfGoalNodes];
         self.goalRegistrationNode.lineWidth = 0.0f;
         [goalContainer addChild:self.goalRegistrationNode];
@@ -254,7 +261,8 @@
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
     
-    if ([self.ball intersectsNode:self.goalRegistrationNode]) {
+    // detektera mål
+    if ([self.ballRegistrationNode intersectsNode:self.goalRegistrationNode]) {
 //        NSLog(@"Mål!");
         self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
         self.ball.physicsBody.angularVelocity = 0;
