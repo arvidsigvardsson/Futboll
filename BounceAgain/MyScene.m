@@ -8,12 +8,10 @@
 
 #import "MyScene.h"
 
-//static const uint32_t ballCategory     =  0x1 << 0;
-//static const uint32_t spikesCategory        =  0x1 << 1;
-//static const uint32_t staticNodesCategory    =  0x1 << 2;
+static const uint32_t ballCategory              =  0x1 << 0;
+static const uint32_t goalRegistrationCategory  =  0x1 << 1;
 
-
-@interface MyScene ()
+@interface MyScene () <SKPhysicsContactDelegate>
 
 @property (nonatomic) SKSpriteNode *ball;
 @property BOOL ballIsSelected;
@@ -36,8 +34,11 @@
     if (self = [super initWithSize:size]) {
         /* Setup your scene here */
     
+    
+        
+        
         // bakgrund och spelplan
-        self.backgroundColor = [SKColor colorWithRed:255.0/256.0f green:219.0/256.0f blue:153.0/256.0f alpha:1];
+        self.backgroundColor = [SKColor colorWithRed:255.0/255.0f green:134.0/255.0f blue:25.0/255.0f alpha:1];
         
         // målområden
         CGMutablePathRef lowerGoalAreaPath = CGPathCreateMutable();
@@ -47,7 +48,7 @@
         SKShapeNode *lowerGoalAreaNode = [[SKShapeNode alloc] init];
         lowerGoalAreaNode.path = lowerGoalAreaPath;
         lowerGoalAreaNode.lineWidth = 5;
-        lowerGoalAreaNode.fillColor = [UIColor blueColor];
+        lowerGoalAreaNode.fillColor = [UIColor colorWithRed:0.0f green:145.0 / 255.0f blue:178.0 / 255.0 alpha:1.0f];
         [self addChild:lowerGoalAreaNode];
         
         CGMutablePathRef upperGoalAreaPath = CGPathCreateMutable();
@@ -57,7 +58,7 @@
         SKShapeNode *upperGoalAreaNode = [[SKShapeNode alloc] init];
         upperGoalAreaNode.path = upperGoalAreaPath;
         upperGoalAreaNode.lineWidth = 5;
-        upperGoalAreaNode.fillColor = [UIColor blueColor];
+        upperGoalAreaNode.fillColor = [UIColor colorWithRed:0.0f green:145.0 / 255.0f blue:178.0 / 255.0 alpha:1.0f];
         [self addChild:upperGoalAreaNode];
         
         // mittlinje
@@ -77,11 +78,43 @@
         [self addChild:sidelines];
         
         
-        // skapa spelyta, hela skärmen, ingen gravitation
+        // skapa spelyta, hela skärmen, ingen gravitation, kontaktdelegat för att registrera att bollen gått i mål
         
         self.physicsWorld.gravity = CGVectorMake(0.0f, 0.0f);
-        SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+        self.physicsWorld.contactDelegate = self;
+        
+//        SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+        
+        // borderbody skall ha ett "hål" vid mållinjen för att bollen vid höj hastighet inte ska studsa tillbaka, utan fortsätta upp utanför skärmen
+        CGMutablePathRef borderPath = CGPathCreateMutable();
+//        CGPathMoveToPoint(borderPath, nil, 0.0f, 0.0f);
+        
+        CGPoint addLines[] =
+        {
+            CGPointMake(0.0, 0.0),
+            CGPointMake(0.0, self.frame.size.height),
+            CGPointMake(self.frame.size.width / 2.0f - 75, self.frame.size.height),
+            CGPointMake(self.frame.size.width / 2.0f - 75, self.frame.size.height + 200.0),
+            CGPointMake(self.frame.size.width / 2.0f + 75, self.frame.size.height + 200.0),
+            CGPointMake(self.frame.size.width / 2.0f + 75, self.frame.size.height),
+            CGPointMake(self.frame.size.width, self.frame.size.height),
+            CGPointMake(self.frame.size.width, 0.0f),
+            CGPointMake(0.0f, 0.0f)
+        };
+        
+        CGPathAddLines(borderPath, nil, addLines, 10);
+        SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeChainFromPath:borderPath];
+        
+        SKShapeNode *testNode = [[SKShapeNode alloc] init];
+        testNode.path = borderPath;
+//        testNode.fillColor = [UIColor redColor];
+        [self addChild:testNode];
+        
+//         CGContextAddLines(context, addLines, sizeof(addLines)/sizeof(addLines[0]));
+        
+        
         self.physicsBody = borderBody;
+        
         
         // friktion, ************  ska nog ändras ********************
         self.physicsBody.friction = 0.0f;
@@ -99,6 +132,9 @@
 //        self.ball.physicsBody = [SKPhysicsBody bo]
         self.ball.physicsBody.dynamic = YES;
         self.ball.physicsBody.affectedByGravity = NO;
+        self.ball.physicsBody.categoryBitMask = ballCategory;
+        self.ball.physicsBody.contactTestBitMask = goalRegistrationCategory;
+        self.ball.physicsBody.usesPreciseCollisionDetection = YES;
         
         // nod för att detektera mål
         self.ballRegistrationNode = [SKSpriteNode spriteNodeWithImageNamed:@"newFootball"];
@@ -150,9 +186,13 @@
         
         // node som registrerar att bollen gått i mål, är en property då den används i updatemetoden
         self.goalRegistrationNode = [[SKShapeNode alloc] init];
-        self.goalRegistrationNode.path = CGPathCreateWithRect(CGRectMake(-75.0f, 75.0f, 150.0f, 20.0f), nil);
+        self.goalRegistrationNode.path = CGPathCreateWithRect(CGRectMake(-75.0f, 15.0f, 150.0f, 200.0f), nil);
         self.goalRegistrationNode.fillColor = [SKColor colorWithRed:1.0f green:1.0f blue:0.0f alpha:alphaOfGoalNodes];
         self.goalRegistrationNode.lineWidth = 0.0f;
+//        self.goalRegistrationNode.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:self.goalRegistrationNode.path];
+//        self.goalRegistrationNode.physicsBody.categoryBitMask = goalRegistrationCategory;
+//        self.goalRegistrationNode.physicsBody.contactTestBitMask = ballCategory;
+//        self.goalRegistrationNode.physicsBody.usesPreciseCollisionDetection = YES;
         [goalContainer addChild:self.goalRegistrationNode];
         
         
@@ -257,16 +297,49 @@
     }
 }
 
+-(void)didBeginContact:(SKPhysicsContact *)contact {
+    NSLog(@"Kontakt!");
+    
+    SKPhysicsBody *firstBody, *secondBody;
+    
+    if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
+    {
+        firstBody = contact.bodyA;
+        secondBody = contact.bodyB;
+    }
+    else
+    {
+        firstBody = contact.bodyB;
+        secondBody = contact.bodyA;
+    }
+    
+    // 2
+    if ((firstBody.categoryBitMask & goalRegistrationCategory) != 0 && (secondBody.categoryBitMask & ballCategory) != 0) {
+            NSLog(@"Kontaktmål");
+    }
+}
+
+
+
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
     
     // detektera mål
-    if ([self.ballRegistrationNode intersectsNode:self.goalRegistrationNode]) {
+//    if ([self.ballRegistrationNode intersectsNode:self.goalRegistrationNode]) {
 //        NSLog(@"Mål!");
+//        self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
+//        self.ball.physicsBody.angularVelocity = 0;
+//    }
+
+    if (self.ball.position.y > self.frame.size.height) {
+        NSLog(@"Mål!");
         self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
         self.ball.physicsBody.angularVelocity = 0;
+
+
     }
+    
     
     // hindra bollen från att få för stor rotation
 //    NSLog(@"Ang vel = %f", self.ball.physicsBody.angularVelocity);
