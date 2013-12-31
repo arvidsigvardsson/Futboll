@@ -78,6 +78,45 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
         [self addChild:sidelines];
         
         
+        // textnoder, för poängräkning, etc
+        SKSpriteNode *scoreHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5] size:CGSizeMake(50, 50)];
+        scoreHolderNode.position = CGPointMake(self.frame.size.width - 50, self.frame.size.height - 33);
+        
+        SKLabelNode *scoreTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica Neue"];
+        scoreTitleNode.fontSize = 12;
+        scoreTitleNode.text = @"SCORE";
+        scoreTitleNode.position = CGPointMake(0, 10);
+        
+        SKLabelNode *scoreNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica Neue"];
+        scoreNode.position = CGPointMake(0, -20);
+        scoreNode.text = @"03";
+//        scoreNode.position = CGPointMake(100.0f, 100.0f);
+        
+        [scoreHolderNode addChild:scoreTitleNode];
+        [scoreHolderNode addChild:scoreNode];
+        [self addChild:scoreHolderNode];
+        
+        // rounds
+        SKSpriteNode *roundHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5] size:CGSizeMake(50, 50)];
+        roundHolderNode.position = CGPointMake(50, self.frame.size.height - 33);
+        
+        SKLabelNode *roundTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica Neue"];
+        roundTitleNode.fontSize = 12;
+        roundTitleNode.text = @"ROUND";
+        roundTitleNode.position = CGPointMake(0, 10);
+        
+        SKLabelNode *roundNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica Neue"];
+        roundNode.position = CGPointMake(0, -20);
+        roundNode.text = @"03";
+        //        scoreNode.position = CGPointMake(100.0f, 100.0f);
+        
+        [roundHolderNode addChild:roundTitleNode];
+        [roundHolderNode addChild:roundNode];
+        [self addChild:roundHolderNode];
+        
+        
+        
+        
         // skapa spelyta, hela skärmen, ingen gravitation, kontaktdelegat för att registrera att bollen gått i mål
         
         self.physicsWorld.gravity = CGVectorMake(0.0f, 0.0f);
