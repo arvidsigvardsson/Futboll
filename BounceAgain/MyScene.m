@@ -15,15 +15,17 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
 
 @property (nonatomic) SKSpriteNode *ball;
 @property BOOL ballIsSelected;
-//@property float ballOriginalX;
-//@property float ballOriginalY;
+
 @property CGPoint originalBallPosition;
 @property CGPoint oldBallPosition;
-@property (nonatomic) SKSpriteNode *goal;
+
+// @property (nonatomic) SKSpriteNode *goal;
 @property (nonatomic) SKShapeNode *goalRegistrationNode;
 @property (nonatomic) SKSpriteNode *ballRegistrationNode;
-@property (nonatomic) SKSpriteNode *spikesNode;
+// @property (nonatomic) SKSpriteNode *spikesNode;
 @property (nonatomic) SKSpriteNode *defender;
+
+@property BOOL hasMadeShot; // för att veta om spelaren skjutit bollen och hindra denne från fler skott i samma omgång
 
 
 @end
@@ -79,15 +81,15 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
         
         
         // textnoder, för poängräkning, etc
-        SKSpriteNode *scoreHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5] size:CGSizeMake(50, 50)];
+        SKSpriteNode *scoreHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.0] size:CGSizeMake(50, 50)];
         scoreHolderNode.position = CGPointMake(self.frame.size.width - 50, self.frame.size.height - 33);
         
-        SKLabelNode *scoreTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica Neue"];
+        SKLabelNode *scoreTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
         scoreTitleNode.fontSize = 12;
         scoreTitleNode.text = @"SCORE";
         scoreTitleNode.position = CGPointMake(0, 10);
         
-        SKLabelNode *scoreNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica Neue"];
+        SKLabelNode *scoreNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
         scoreNode.position = CGPointMake(0, -20);
         scoreNode.text = @"03";
 //        scoreNode.position = CGPointMake(100.0f, 100.0f);
@@ -97,15 +99,15 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
         [self addChild:scoreHolderNode];
         
         // rounds
-        SKSpriteNode *roundHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5] size:CGSizeMake(50, 50)];
+        SKSpriteNode *roundHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.0] size:CGSizeMake(50, 50)];
         roundHolderNode.position = CGPointMake(50, self.frame.size.height - 33);
         
-        SKLabelNode *roundTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica Neue"];
+        SKLabelNode *roundTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
         roundTitleNode.fontSize = 12;
         roundTitleNode.text = @"ROUND";
         roundTitleNode.position = CGPointMake(0, 10);
         
-        SKLabelNode *roundNode = [SKLabelNode labelNodeWithFontNamed:@"Helvetica Neue"];
+        SKLabelNode *roundNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
         roundNode.position = CGPointMake(0, -20);
         roundNode.text = @"03";
         //        scoreNode.position = CGPointMake(100.0f, 100.0f);
@@ -263,6 +265,9 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
 -(void)beginRound {
     NSLog(@"beginRound");
     
+    // se till att spelaren kan skjuta bollen
+    self.hasMadeShot = NO;
+    
     // initera bollen i nedre målområdet
     
     //NSLog(@"lowergoalareaposition = %f, %f", [lower)
@@ -310,8 +315,10 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
         
     }
 
-    else if (recognizer.state == UIGestureRecognizerStateEnded && self.ballIsSelected) {
+    else if (recognizer.state == UIGestureRecognizerStateEnded && self.ballIsSelected && !self.hasMadeShot) {
         self.ballIsSelected = NO;
+        self.hasMadeShot = YES;
+        
         CGPoint velocity = [recognizer velocityInView:self.view];
         CGVector velocityVector = CGVectorMake(velocity.x * 0.05, -velocity.y * 0.05);
         [self.ball.physicsBody applyImpulse:velocityVector];
@@ -362,7 +369,18 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
 
 
 -(void)update:(CFTimeInterval)currentTime {
+    
+    // testing
+//    NSLog(@"ball velocity:  dx = %f     dy = %f", self.ball.physicsBody.velocity.dx, self.ball.physicsBody.velocity.dy);
+    
     /* Called before each frame is rendered */
+    
+    if (self.hasMadeShot && ABS(self.ball.physicsBody.velocity.dx) < 10.0f && ABS(self.ball.physicsBody.velocity.dy) < 10.0f) {
+        NSLog(@"New round");
+        [self beginRound];
+    }
+    
+    
     
     // detektera mål
 //    if ([self.ballRegistrationNode intersectsNode:self.goalRegistrationNode]) {
