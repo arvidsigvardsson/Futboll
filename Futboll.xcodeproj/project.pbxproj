@@ -54,12 +54,12 @@
 		715642DA186B9CA80001D3A3 /* goalBW@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "goalBW@2x.png"; sourceTree = "<group>"; };
 		7157A7BE18633D42005ECAD6 /* goal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "goal@2x.png"; sourceTree = "<group>"; };
 		7157A7C218639813005ECAD6 /* football@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "football@2x.png"; sourceTree = "<group>"; };
-		7187CC32185F19E000DFAE14 /* Futbol.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Futbol.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7187CC32185F19E000DFAE14 /* Futboll.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Futboll.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7187CC35185F19E000DFAE14 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7187CC37185F19E000DFAE14 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7187CC39185F19E000DFAE14 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7187CC3B185F19E000DFAE14 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
-		7187CC3F185F19E000DFAE14 /* Futbol-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Futbol-Info.plist"; sourceTree = "<group>"; };
+		7187CC3F185F19E000DFAE14 /* Futboll-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Futboll-Info.plist"; sourceTree = "<group>"; };
 		7187CC41185F19E000DFAE14 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7187CC43185F19E000DFAE14 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7187CC45185F19E000DFAE14 /* Futbol-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Futbol-Prefix.pch"; sourceTree = "<group>"; };
@@ -73,9 +73,9 @@
 		7187CC53185F19E000DFAE14 /* MyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScene.m; sourceTree = "<group>"; };
 		7187CC55185F19E000DFAE14 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		7187CC57185F19E000DFAE14 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		7187CC5D185F19E000DFAE14 /* FutbolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FutbolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7187CC5D185F19E000DFAE14 /* FutbollTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FutbollTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7187CC5E185F19E100DFAE14 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		7187CC66185F19E100DFAE14 /* FutbolTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FutbolTests-Info.plist"; sourceTree = "<group>"; };
+		7187CC66185F19E100DFAE14 /* FutbollTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FutbollTests-Info.plist"; sourceTree = "<group>"; };
 		7187CC68185F19E100DFAE14 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7187CC6A185F19E100DFAE14 /* BounceAgainTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BounceAgainTests.m; sourceTree = "<group>"; };
 		71CACBF3186467180073D9DF /* floorpattern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "floorpattern@2x.png"; sourceTree = "<group>"; };
@@ -122,8 +122,8 @@
 		7187CC33185F19E000DFAE14 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7187CC32185F19E000DFAE14 /* Futbol.app */,
-				7187CC5D185F19E000DFAE14 /* FutbolTests.xctest */,
+				7187CC32185F19E000DFAE14 /* Futboll.app */,
+				7187CC5D185F19E000DFAE14 /* FutbollTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -162,7 +162,7 @@
 		7187CC3E185F19E000DFAE14 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7187CC3F185F19E000DFAE14 /* Futbol-Info.plist */,
+				7187CC3F185F19E000DFAE14 /* Futboll-Info.plist */,
 				7187CC40185F19E000DFAE14 /* InfoPlist.strings */,
 				7187CC43185F19E000DFAE14 /* main.m */,
 				7187CC45185F19E000DFAE14 /* Futbol-Prefix.pch */,
@@ -182,7 +182,7 @@
 		7187CC65185F19E100DFAE14 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7187CC66185F19E100DFAE14 /* FutbolTests-Info.plist */,
+				7187CC66185F19E100DFAE14 /* FutbollTests-Info.plist */,
 				7187CC67185F19E100DFAE14 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -208,9 +208,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7187CC31185F19E000DFAE14 /* Futbol */ = {
+		7187CC31185F19E000DFAE14 /* Futboll */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7187CC6E185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "Futbol" */;
+			buildConfigurationList = 7187CC6E185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "Futboll" */;
 			buildPhases = (
 				7187CC2E185F19E000DFAE14 /* Sources */,
 				7187CC2F185F19E000DFAE14 /* Frameworks */,
@@ -220,14 +220,14 @@
 			);
 			dependencies = (
 			);
-			name = Futbol;
+			name = Futboll;
 			productName = BounceAgain;
-			productReference = 7187CC32185F19E000DFAE14 /* Futbol.app */;
+			productReference = 7187CC32185F19E000DFAE14 /* Futboll.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7187CC5C185F19E000DFAE14 /* FutbolTests */ = {
+		7187CC5C185F19E000DFAE14 /* FutbollTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7187CC71185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "FutbolTests" */;
+			buildConfigurationList = 7187CC71185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "FutbollTests" */;
 			buildPhases = (
 				7187CC59185F19E000DFAE14 /* Sources */,
 				7187CC5A185F19E000DFAE14 /* Frameworks */,
@@ -238,9 +238,9 @@
 			dependencies = (
 				7187CC63185F19E100DFAE14 /* PBXTargetDependency */,
 			);
-			name = FutbolTests;
+			name = FutbollTests;
 			productName = BounceAgainTests;
-			productReference = 7187CC5D185F19E000DFAE14 /* FutbolTests.xctest */;
+			productReference = 7187CC5D185F19E000DFAE14 /* FutbollTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -257,7 +257,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7187CC2D185F19E000DFAE14 /* Build configuration list for PBXProject "Futbol" */;
+			buildConfigurationList = 7187CC2D185F19E000DFAE14 /* Build configuration list for PBXProject "Futboll" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -270,8 +270,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7187CC31185F19E000DFAE14 /* Futbol */,
-				7187CC5C185F19E000DFAE14 /* FutbolTests */,
+				7187CC31185F19E000DFAE14 /* Futboll */,
+				7187CC5C185F19E000DFAE14 /* FutbollTests */,
 			);
 		};
 /* End PBXProject section */
@@ -334,7 +334,7 @@
 /* Begin PBXTargetDependency section */
 		7187CC63185F19E100DFAE14 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7187CC31185F19E000DFAE14 /* Futbol */;
+			target = 7187CC31185F19E000DFAE14 /* Futboll */;
 			targetProxy = 7187CC62185F19E100DFAE14 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -457,10 +457,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BounceAgain/Futbol-Prefix.pch";
-				INFOPLIST_FILE = "BounceAgain/Futbol-Info.plist";
-				PRODUCT_NAME = Futbol;
+				GCC_PREFIX_HEADER = "BounceAgain/Futboll-Prefix.pch";
+				INFOPLIST_FILE = "BounceAgain/Futboll-Info.plist";
+				PRODUCT_NAME = Futboll;
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -471,10 +472,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "BounceAgain/Futbol-Prefix.pch";
-				INFOPLIST_FILE = "BounceAgain/Futbol-Info.plist";
-				PRODUCT_NAME = Futbol;
+				GCC_PREFIX_HEADER = "BounceAgain/Futboll-Prefix.pch";
+				INFOPLIST_FILE = "BounceAgain/Futboll-Info.plist";
+				PRODUCT_NAME = Futboll;
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -495,8 +497,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "BounceAgainTests/FutbolTests-Info.plist";
-				PRODUCT_NAME = FutbolTests;
+				INFOPLIST_FILE = "BounceAgainTests/FutbollTests-Info.plist";
+				PRODUCT_NAME = FutbollTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -514,8 +516,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BounceAgain/BounceAgain-Prefix.pch";
-				INFOPLIST_FILE = "BounceAgainTests/FutbolTests-Info.plist";
-				PRODUCT_NAME = FutbolTests;
+				INFOPLIST_FILE = "BounceAgainTests/FutbollTests-Info.plist";
+				PRODUCT_NAME = FutbollTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -524,7 +526,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7187CC2D185F19E000DFAE14 /* Build configuration list for PBXProject "Futbol" */ = {
+		7187CC2D185F19E000DFAE14 /* Build configuration list for PBXProject "Futboll" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7187CC6C185F19E100DFAE14 /* Debug */,
@@ -533,7 +535,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7187CC6E185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "Futbol" */ = {
+		7187CC6E185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "Futboll" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7187CC6F185F19E100DFAE14 /* Debug */,
@@ -542,7 +544,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7187CC71185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "FutbolTests" */ = {
+		7187CC71185F19E100DFAE14 /* Build configuration list for PBXNativeTarget "FutbollTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7187CC72185F19E100DFAE14 /* Debug */,

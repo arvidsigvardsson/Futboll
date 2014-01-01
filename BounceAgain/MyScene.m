@@ -266,11 +266,23 @@
         [self addChild:self.defender];
         
         
+        // nod för meddelanden
+        SKLabelNode *messageNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
+        messageNode.name = @"messageNode";
+        messageNode.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
+        messageNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
+        messageNode.position = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height / 2.0 + 75.0);
+        messageNode.fontSize = 75;
+//        messageNode.text = @"Round 1";
+        messageNode.alpha = 0.0;
+        [self addChild:messageNode];
+        
         
 //        [self beginRound];
         
         [self updateScoreTo:0];
         [self updateRoundTo:1];
+        [self displayMessage:@"Första rundan" forDuration:3];
         
         
     }
@@ -348,16 +360,16 @@
 
 
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"TouchesBegan-metoden");
-    
-    UITouch *touch = [touches anyObject];
-    CGPoint location = [touch locationInView:self.view];
-    
-    if ([self.ball containsPoint:location]) {
-        self.ballIsSelected = YES;
-    }
-}
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//    NSLog(@"TouchesBegan-metoden");
+//    
+//    UITouch *touch = [touches anyObject];
+//    CGPoint location = [touch locationInView:self.view];
+//    
+//    if ([self.ball containsPoint:location]) {
+//        self.ballIsSelected = YES;
+//    }
+//}
 
 -(void)updateRoundTo:(int)newRound {
     NSString *roundString;
@@ -392,6 +404,20 @@
     [self updateScoreTo:self.score];
 }
 
+-(void)displayMessage:(NSString *)message forDuration:(NSTimeInterval)duration {
+    SKLabelNode *messageNode = [self childNodeWithName:@"messageNode"];
+    messageNode.text = message;
+//    messageNode.alpha = 1.0;
+    
+    SKAction *fadeAction = [SKAction sequence:@[
+                                          [SKAction fadeInWithDuration:duration / 3.0],
+                                          [SKAction fadeOutWithDuration:duration]]];
+    
+    
+    [messageNode runAction:fadeAction];
+    
+}
+
 
 
 -(void)update:(CFTimeInterval)currentTime {
@@ -417,6 +443,7 @@
 
     if (self.ball.position.y > self.frame.size.height) {
         NSLog(@"Mål!");
+        [self displayMessage:@"Goal!" forDuration:1];
         self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
         self.ball.physicsBody.angularVelocity = 0;
         [self goalWasScored];
