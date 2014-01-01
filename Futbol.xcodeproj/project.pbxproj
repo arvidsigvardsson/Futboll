@@ -152,7 +152,7 @@
 				7187CC52185F19E000DFAE14 /* MyScene.h */,
 				7187CC53185F19E000DFAE14 /* MyScene.m */,
 				7187CC55185F19E000DFAE14 /* Spaceship.png */,
-				71D001051865F2CB00C68AE8 /* ImageAsstes */,
+				71D001051865F2CB00C68AE8 /* ImageAssets */,
 				7187CC57185F19E000DFAE14 /* Images.xcassets */,
 				7187CC3E185F19E000DFAE14 /* Supporting Files */,
 			);
@@ -188,7 +188,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		71D001051865F2CB00C68AE8 /* ImageAsstes */ = {
+		71D001051865F2CB00C68AE8 /* ImageAssets */ = {
 			isa = PBXGroup;
 			children = (
 				715642DA186B9CA80001D3A3 /* goalBW@2x.png */,
@@ -202,7 +202,7 @@
 				71CACBF5186468810073D9DF /* altFloorPattern.png */,
 				71CACBF3186467180073D9DF /* floorpattern@2x.png */,
 			);
-			name = ImageAsstes;
+			name = ImageAssets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -8,10 +8,10 @@
 
 #import "MyScene.h"
 
-static const uint32_t ballCategory              =  0x1 << 0;
-static const uint32_t goalRegistrationCategory  =  0x1 << 1;
+//static const uint32_t ballCategory              =  0x1 << 0;
+//static const uint32_t goalRegistrationCategory  =  0x1 << 1;
 
-@interface MyScene () <SKPhysicsContactDelegate>
+@interface MyScene () // <SKPhysicsContactDelegate>
 
 @property (nonatomic) SKSpriteNode *ball;
 @property BOOL ballIsSelected;
@@ -25,7 +25,17 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
 // @property (nonatomic) SKSpriteNode *spikesNode;
 @property (nonatomic) SKSpriteNode *defender;
 
+@property SKLabelNode *scoreNode;
+@property SKLabelNode *roundNode;
+
+
 @property BOOL hasMadeShot; // för att veta om spelaren skjutit bollen och hindra denne från fler skott i samma omgång
+
+@property int score;
+@property int round;
+
+
+
 
 
 @end
@@ -36,7 +46,8 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
     if (self = [super initWithSize:size]) {
         /* Setup your scene here */
     
-    
+        self.score = 0;
+        self.round = 1;
         
         
         // bakgrund och spelplan
@@ -81,39 +92,41 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
         
         
         // textnoder, för poängräkning, etc
-        SKSpriteNode *scoreHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.0] size:CGSizeMake(50, 50)];
+        SKSpriteNode *scoreHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.0] size:CGSizeMake(75, 75)];
         scoreHolderNode.position = CGPointMake(self.frame.size.width - 50, self.frame.size.height - 33);
         
         SKLabelNode *scoreTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
-        scoreTitleNode.fontSize = 12;
+        scoreTitleNode.fontSize = 15;
         scoreTitleNode.text = @"SCORE";
         scoreTitleNode.position = CGPointMake(0, 10);
         
-        SKLabelNode *scoreNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
-        scoreNode.position = CGPointMake(0, -20);
-        scoreNode.text = @"03";
+        self.scoreNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
+        self.scoreNode.position = CGPointMake(0, -25);
+        self.scoreNode.fontSize = 40;
+//        self.scoreNode.text = @"03";
 //        scoreNode.position = CGPointMake(100.0f, 100.0f);
         
         [scoreHolderNode addChild:scoreTitleNode];
-        [scoreHolderNode addChild:scoreNode];
+        [scoreHolderNode addChild:self.scoreNode];
         [self addChild:scoreHolderNode];
         
         // rounds
-        SKSpriteNode *roundHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.0] size:CGSizeMake(50, 50)];
+        SKSpriteNode *roundHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.0] size:CGSizeMake(75, 75)];
         roundHolderNode.position = CGPointMake(50, self.frame.size.height - 33);
         
         SKLabelNode *roundTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
-        roundTitleNode.fontSize = 12;
+        roundTitleNode.fontSize = 15;
         roundTitleNode.text = @"ROUND";
         roundTitleNode.position = CGPointMake(0, 10);
         
-        SKLabelNode *roundNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
-        roundNode.position = CGPointMake(0, -20);
-        roundNode.text = @"03";
+        self.roundNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
+        self.roundNode.position = CGPointMake(0, -25);
+        self.roundNode.fontSize = 40;
+//        self.roundNode.text = @"03";
         //        scoreNode.position = CGPointMake(100.0f, 100.0f);
         
         [roundHolderNode addChild:roundTitleNode];
-        [roundHolderNode addChild:roundNode];
+        [roundHolderNode addChild:self.roundNode];
         [self addChild:roundHolderNode];
         
         
@@ -122,7 +135,7 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
         // skapa spelyta, hela skärmen, ingen gravitation, kontaktdelegat för att registrera att bollen gått i mål
         
         self.physicsWorld.gravity = CGVectorMake(0.0f, 0.0f);
-        self.physicsWorld.contactDelegate = self;
+//        self.physicsWorld.contactDelegate = self;
         
 //        SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
         
@@ -173,9 +186,9 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
 //        self.ball.physicsBody = [SKPhysicsBody bo]
         self.ball.physicsBody.dynamic = YES;
         self.ball.physicsBody.affectedByGravity = NO;
-        self.ball.physicsBody.categoryBitMask = ballCategory;
-        self.ball.physicsBody.contactTestBitMask = goalRegistrationCategory;
-        self.ball.physicsBody.usesPreciseCollisionDetection = YES;
+//        self.ball.physicsBody.categoryBitMask = ballCategory;
+//        self.ball.physicsBody.contactTestBitMask = goalRegistrationCategory;
+//        self.ball.physicsBody.usesPreciseCollisionDetection = YES;
         
         // nod för att detektera mål
         self.ballRegistrationNode = [SKSpriteNode spriteNodeWithImageNamed:@"newFootball"];
@@ -256,6 +269,9 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
         
 //        [self beginRound];
         
+        [self updateScoreTo:0];
+        [self updateRoundTo:1];
+        
         
     }
     return self;
@@ -300,7 +316,7 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
     [self beginRound];
 }
 
-
+// för att hantera skottet
 -(void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         CGPoint touchLocation = [recognizer locationInView:self.view];
@@ -343,28 +359,38 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
     }
 }
 
--(void)didBeginContact:(SKPhysicsContact *)contact {
-    NSLog(@"Kontakt!");
+-(void)updateRoundTo:(int)newRound {
+    NSString *roundString;
     
-    SKPhysicsBody *firstBody, *secondBody;
-    
-    if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
-    {
-        firstBody = contact.bodyA;
-        secondBody = contact.bodyB;
-    }
-    else
-    {
-        firstBody = contact.bodyB;
-        secondBody = contact.bodyA;
+    if (newRound / 10 == 0) {
+        roundString = [NSString stringWithFormat:@"0%i", newRound];
+    } else {
+        roundString = [NSString stringWithFormat:@"%i", newRound];
     }
     
-    // 2
-    if ((firstBody.categoryBitMask & goalRegistrationCategory) != 0 && (secondBody.categoryBitMask & ballCategory) != 0) {
-            NSLog(@"Kontaktmål");
-    }
+    self.roundNode.text = roundString;
 }
 
+
+-(void)updateScoreTo:(int)newScore {
+    NSLog(@"score = %i", newScore);
+    
+    NSString *scoreString;
+    
+    if (newScore / 10 == 0) {
+        scoreString = [NSString stringWithFormat:@"0%i", newScore];
+    } else {
+        scoreString = [NSString stringWithFormat:@"%i", newScore];
+    }
+    
+    self.scoreNode.text = scoreString;
+    
+}
+
+-(void)goalWasScored {
+    self.score += 1;
+    [self updateScoreTo:self.score];
+}
 
 
 
@@ -393,6 +419,7 @@ static const uint32_t goalRegistrationCategory  =  0x1 << 1;
         NSLog(@"Mål!");
         self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
         self.ball.physicsBody.angularVelocity = 0;
+        [self goalWasScored];
 
 
     }
