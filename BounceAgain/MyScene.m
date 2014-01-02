@@ -17,6 +17,8 @@
 @property int round;
 
 @property int timeOfRound;
+@property bool timerIsPaused;
+
 @end
 
 @implementation MyScene
@@ -102,9 +104,10 @@
         roundTitleNode.position = CGPointMake(0, 10);
         
         SKLabelNode *roundNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
-        roundNode.position = CGPointMake(-35, -20);
+        roundNode.position = CGPointMake(-27, -20);
         roundNode.fontSize = 30;
         roundNode.horizontalAlignmentMode = 1;
+        roundNode.text = @"0.0";
         roundNode.name = @"roundNode";
 //        scoreNode.position = CGPointMake(100.0f, 100.0f);
         
@@ -144,24 +147,24 @@
         self.physicsBody.friction = 1.0f;
 
         
-        // initiera en boll
-        SKSpriteNode *ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
-        ball.xScale = 0.75f;
-        ball.yScale = ball.xScale;
-        ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
-        [ball setName:@"ball"];
-        
-        // ge bollen en physicsbody
-        ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:23.0f];
-        ball.physicsBody.dynamic = YES;
-        ball.physicsBody.affectedByGravity = NO;
-        ball.physicsBody.restitution = 0.17;
-        ball.physicsBody.friction = 1.0;
-        
-        // bollen är ej ännu selected
-        self.ballIsSelected = NO;
-        
-        [self addChild:ball];
+//        // initiera en boll
+//        SKSpriteNode *ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
+//        ball.xScale = 0.75f;
+//        ball.yScale = ball.xScale;
+//        ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
+//        [ball setName:@"ball"];
+//        
+//        // ge bollen en physicsbody
+//        ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:23.0f];
+//        ball.physicsBody.dynamic = YES;
+//        ball.physicsBody.affectedByGravity = NO;
+//        ball.physicsBody.restitution = 0.17;
+//        ball.physicsBody.friction = 1.0;
+//        
+//        // bollen är ej ännu selected
+//        self.ballIsSelected = NO;
+//        
+//        [self addChild:ball];
         
         
 
@@ -179,6 +182,7 @@
         SKSpriteNode *goalImageSprite = [SKSpriteNode spriteNodeWithImageNamed:@"goalBW"];
         goalImageSprite.xScale = 0.65f;
         goalImageSprite.yScale = goalImageSprite.xScale;
+        goalImageSprite.zPosition = 1;
         [goalContainer addChild:goalImageSprite];
         
         // noder för stolpar
@@ -243,37 +247,79 @@
         
         // timer för omgången
 //        NSTimer *roundTimer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
-        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
-        self.timeOfRound = 500;
-        
-//        [self beginRound];
-        
-        [self updateScoreTo:0];
-//        [self updateRoundTo:1];
-        [self displayMessage:@"Start" forDuration:1];
+//        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
+//        self.timeOfRound = 50;
+//        
+//        self.timerIsPaused = YES;
+//        
+////        [self beginRound];
+//        
+//        [self updateScoreTo:0];
+////        [self updateRoundTo:1];
+//        [self displayMessage:@"Start" forDuration:1];
         
         
     }
     return self;
 }
 
+
+-(void)createBall {
+    // initiera en boll
+    SKSpriteNode *ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
+    ball.xScale = 0.75f;
+    ball.yScale = ball.xScale;
+//    ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
+    [ball setName:@"ball"];
+    
+    // ge bollen en physicsbody
+    ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:23.0f];
+    ball.physicsBody.dynamic = YES;
+    ball.physicsBody.affectedByGravity = NO;
+    ball.physicsBody.restitution = 0.17;
+    ball.physicsBody.friction = 1.0;
+    
+    // bollen är ej ännu selected
+    self.ballIsSelected = NO;
+    
+    [self addChild:ball];
+
+}
+
+
+
+
+
+
 -(void)timerCountdown {
 //    NSLog(@"Countdown");
-    
-    SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
-    SKLabelNode *roundNode = [roundHolderNode childNodeWithName:@"roundNode"];
-//
-    self.timeOfRound -= 1;
-    
-    NSString *displayTime = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
-//    roundNode.text = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
-    roundNode.text = displayTime;
-//    NSLog(displayTime);
+    if (!self.timerIsPaused) {
+        SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
+        SKLabelNode *roundNode = [roundHolderNode childNodeWithName:@"roundNode"];
+    //
+        self.timeOfRound -= 1;
+        NSString *displayTime;
+        
+        if (self.timeOfRound / 10 == 0) {
+            displayTime = [NSString stringWithFormat:@"                %i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
+        } else {
+            displayTime = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
+        }
+    //    roundNode.text = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
+        roundNode.text = displayTime;
+    //    NSLog(displayTime);
+        
+        
+        if (self.timeOfRound == 0) {
+            self.timerIsPaused = YES;
+            [self endOfRound];
+        }
+    }
 }
 
 
 // metod för start av omgång
--(void)beginRound {
+-(void)resetBall {
     NSLog(@"beginRound");
     
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
@@ -312,7 +358,9 @@
 //    UIScreenEdgePanGestureRecognizer = [[UIScreenEdgePanGestureRecognizer ]
 	
 	// starta spelet
-    [self beginRound];
+    [self gameStart];
+    //  [self resetBall];
+    
 }
 
 // för att hantera skottet
@@ -348,7 +396,7 @@
 -(void)handlePinchFrom:(UIPinchGestureRecognizer *)recognizer {
     // reseta under utveckling
     if (recognizer.state == UIGestureRecognizerStateEnded) {
-        [self beginRound];
+        [self resetBall];
     }
 }
 
@@ -403,11 +451,58 @@
 //    messageNode.alpha = 1.0;
     
     SKAction *fadeAction = [SKAction sequence:@[
-                                          [SKAction fadeInWithDuration:duration / 3.0],
+                                          [SKAction fadeInWithDuration:0.1],
                                           [SKAction fadeOutWithDuration:duration]]];
     
     
     [messageNode runAction:fadeAction];
+    
+}
+
+
+-(void)startNewRound {
+    // startar ny omgång
+    self.timerIsPaused = NO;
+    [self createBall];
+    [self resetBall];
+}
+
+
+-(void)endOfRound {
+    // avslutar omgång
+
+    self.round += 1;
+    self.timeOfRound = 300;
+    
+    // tar bort bollen mellan omgångarna
+    SKSpriteNode *ball = [self childNodeWithName:@"ball"];
+    [ball removeFromParent];
+    
+    [self displayMessage:[NSString stringWithFormat:@"Round %i", self.round] forDuration:1.5];
+    
+    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(startNewRound) userInfo:nil repeats:NO];
+    
+    
+}
+
+
+-(void)gameStart {
+
+    self.timerIsPaused = YES;
+    self.timeOfRound = 300;
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
+  
+    [self updateScoreTo:0];
+    //        [self updateRoundTo:1];
+    [self displayMessage:@"Round 1" forDuration:2.5];
+    
+    [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(startNewRound) userInfo:nil repeats:NO];
+
+    
+}
+
+-(void)gameOver {
     
 }
 
@@ -423,7 +518,7 @@
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
     if (self.hasMadeShot && ABS(ball.physicsBody.velocity.dx) < 15.0f && ABS(ball.physicsBody.velocity.dy) < 15.0f) {
         NSLog(@"New round");
-        [self beginRound];
+        [self resetBall];
     }
     
     
