@@ -41,6 +41,7 @@
         lowerGoalAreaNode.path = lowerGoalAreaPath;
         lowerGoalAreaNode.lineWidth = 5;
         lowerGoalAreaNode.fillColor = [UIColor colorWithRed:0.0f green:145.0 / 255.0f blue:178.0 / 255.0 alpha:1.0f];
+        lowerGoalAreaNode.name = @"lowerGoalAreaNode";
         [self addChild:lowerGoalAreaNode];
         
         CGMutablePathRef upperGoalAreaPath = CGPathCreateMutable();
@@ -140,7 +141,8 @@
         
         
         // friktion, ************  ska nog ändras ********************
-        self.physicsBody.friction = 0.0f;
+        self.physicsBody.friction = 1.0f;
+
         
         // initiera en boll
         SKSpriteNode *ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
@@ -153,6 +155,8 @@
         ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:23.0f];
         ball.physicsBody.dynamic = YES;
         ball.physicsBody.affectedByGravity = NO;
+        ball.physicsBody.restitution = 0.17;
+        ball.physicsBody.friction = 1.0;
         
         // bollen är ej ännu selected
         self.ballIsSelected = NO;
@@ -264,7 +268,7 @@
     NSString *displayTime = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
 //    roundNode.text = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
     roundNode.text = displayTime;
-    NSLog(displayTime);
+//    NSLog(displayTime);
 }
 
 
@@ -315,12 +319,13 @@
 -(void)handlePanFrom:(UIPanGestureRecognizer *)recognizer {
     
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
-
+    SKNode *lowerGoalAreaNode = [self childNodeWithName:@"lowerGoalAreaNode"];
+    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         CGPoint touchLocation = [recognizer locationInView:self.view];
         
         touchLocation = [self convertPointFromView:touchLocation];
-        if ([ball containsPoint:touchLocation]) {
+        if ([ball containsPoint:touchLocation] && [lowerGoalAreaNode containsPoint:touchLocation]) {
             NSLog(@"Ball is touched");
             self.ballIsSelected = YES;
             self.originalBallPosition = touchLocation;
@@ -329,7 +334,7 @@
         
     }
 
-    else if (recognizer.state == UIGestureRecognizerStateEnded && self.ballIsSelected && !self.hasMadeShot) {
+    else if (recognizer.state == UIGestureRecognizerStateEnded && self.ballIsSelected) { // && !self.hasMadeShot) {
         self.ballIsSelected = NO;
         self.hasMadeShot = YES;
         
@@ -388,6 +393,7 @@
 
 -(void)goalWasScored {
     self.score += 1;
+    self.timeOfRound += 20;
     [self updateScoreTo:self.score];
 }
 
@@ -415,7 +421,7 @@
     /* Called before each frame is rendered */
     
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
-    if (self.hasMadeShot && ABS(ball.physicsBody.velocity.dx) < 10.0f && ABS(ball.physicsBody.velocity.dy) < 10.0f) {
+    if (self.hasMadeShot && ABS(ball.physicsBody.velocity.dx) < 15.0f && ABS(ball.physicsBody.velocity.dy) < 15.0f) {
         NSLog(@"New round");
         [self beginRound];
     }
