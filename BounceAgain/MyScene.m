@@ -8,7 +8,7 @@
 
 #import "MyScene.h"
 
-@interface MyScene () // <SKPhysicsContactDelegate>
+@interface MyScene ()
 
 @property BOOL ballIsSelected;
 @property CGPoint originalBallPosition;
@@ -83,8 +83,7 @@
         scoreNode.position = CGPointMake(0, -25);
         scoreNode.fontSize = 40;
         scoreNode.name = @"scoreNode";
-//        self.scoreNode.text = @"03";
-//        scoreNode.position = CGPointMake(100.0f, 100.0f);
+//        scoreNode.text = @"-1";
         
         [scoreHolderNode addChild:scoreTitleNode];
         [scoreHolderNode addChild:scoreNode];
@@ -104,8 +103,7 @@
         roundNode.position = CGPointMake(0, -25);
         roundNode.fontSize = 40;
         roundNode.name = @"roundNode";
-//        self.roundNode.text = @"03";
-        //        scoreNode.position = CGPointMake(100.0f, 100.0f);
+//        scoreNode.position = CGPointMake(100.0f, 100.0f);
         
         [roundHolderNode addChild:roundTitleNode];
         [roundHolderNode addChild:roundNode];
@@ -117,13 +115,8 @@
         // skapa spelyta, hela skärmen, ingen gravitation, kontaktdelegat för att registrera att bollen gått i mål
         
         self.physicsWorld.gravity = CGVectorMake(0.0f, 0.0f);
-//        self.physicsWorld.contactDelegate = self;
-        
-//        SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
-        
         // borderbody skall ha ett "hål" vid mållinjen för att bollen vid höj hastighet inte ska studsa tillbaka, utan fortsätta upp utanför skärmen
         CGMutablePathRef borderPath = CGPathCreateMutable();
-//        CGPathMoveToPoint(borderPath, nil, 0.0f, 0.0f);
         
         CGPoint addLines[] =
         {
@@ -141,14 +134,6 @@
         CGPathAddLines(borderPath, nil, addLines, 10);
         SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeChainFromPath:borderPath];
         
-        SKShapeNode *testNode = [[SKShapeNode alloc] init];
-        testNode.path = borderPath;
-//        testNode.fillColor = [UIColor redColor];
-        [self addChild:testNode];
-        
-//         CGContextAddLines(context, addLines, sizeof(addLines)/sizeof(addLines[0]));
-        
-        
         self.physicsBody = borderBody;
         
         
@@ -157,7 +142,6 @@
         
         // initiera en boll
         SKSpriteNode *ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
-//        self.ball.position = CGPointMake(50.0f, 50.0f);
         ball.xScale = 0.75f;
         ball.yScale = ball.xScale;
         ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
@@ -165,19 +149,8 @@
         
         // ge bollen en physicsbody
         ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:23.0f];
-//        self.ball.physicsBody = [SKPhysicsBody bo]
         ball.physicsBody.dynamic = YES;
         ball.physicsBody.affectedByGravity = NO;
-//        self.ball.physicsBody.categoryBitMask = ballCategory;
-//        self.ball.physicsBody.contactTestBitMask = goalRegistrationCategory;
-//        self.ball.physicsBody.usesPreciseCollisionDetection = YES;
-        
-        // nod för att detektera mål
-//        self.ballRegistrationNode = [SKSpriteNode spriteNodeWithImageNamed:@"newFootball"];
-//        self.ballRegistrationNode.alpha = 0.0f;
-//        self.ballRegistrationNode.xScale = 0.5f;
-//        self.ballRegistrationNode.yScale = self.ballRegistrationNode.xScale;
-//        [ball addChild:self.ballRegistrationNode];
         
         // bollen är ej ännu selected
         self.ballIsSelected = NO;
@@ -191,7 +164,6 @@
         
         float alphaOfGoalNodes = 0.0f; // testing
         
-//        self.frame.size.height
         SKSpriteNode *goalContainer = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0 green:0 blue:1.0f alpha:0.0f] size:CGSizeMake(150, 100)];
         goalContainer.position = CGPointMake(self.frame.size.width / 2.0f, self.frame.size.height - 30);
         [self addChild:goalContainer];
@@ -220,24 +192,6 @@
         rightGoalPost.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:rightGoalPost.path];
         [goalContainer addChild:rightGoalPost];
         
-        // node som registrerar att bollen gått i mål, är en property då den används i updatemetoden
-//        self.goalRegistrationNode = [[SKShapeNode alloc] init];
-//        self.goalRegistrationNode.path = CGPathCreateWithRect(CGRectMake(-75.0f, 15.0f, 150.0f, 200.0f), nil);
-//        self.goalRegistrationNode.fillColor = [SKColor colorWithRed:1.0f green:1.0f blue:0.0f alpha:alphaOfGoalNodes];
-//        self.goalRegistrationNode.lineWidth = 0.0f;
-////        self.goalRegistrationNode.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:self.goalRegistrationNode.path];
-////        self.goalRegistrationNode.physicsBody.categoryBitMask = goalRegistrationCategory;
-////        self.goalRegistrationNode.physicsBody.contactTestBitMask = ballCategory;
-////        self.goalRegistrationNode.physicsBody.usesPreciseCollisionDetection = YES;
-//        [goalContainer addChild:self.goalRegistrationNode];
-        
-        
-        // hinder för bollen
-//        self.spikesNode = [SKSpriteNode spriteNodeWithImageNamed:@"spikesAlternative"];
-//        self.spikesNode.position = CGPointMake(200, 200);
-//        
-//        [self addChild:self.spikesNode];
-        
         // försvarare
         SKSpriteNode *defender = [SKSpriteNode spriteNodeWithImageNamed:@"defender"];
         defender.xScale = 0.75f;
@@ -256,7 +210,6 @@
         messageNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
         messageNode.position = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height / 2.0 + 75.0);
         messageNode.fontSize = 75;
-//        messageNode.text = @"Round 1";
         messageNode.alpha = 0.0;
         [self addChild:messageNode];
         
@@ -280,11 +233,14 @@
     // se till att spelaren kan skjuta bollen
     self.hasMadeShot = NO;
     
+    float startX = arc4random_uniform(self.frame.size.width - 50.0) + 25.0;
+    float startY = arc4random_uniform(25.0) + 50.0;
     // initera bollen i nedre målområdet
     
     //NSLog(@"lowergoalareaposition = %f, %f", [lower)
     
-    ball.position = CGPointMake(50.0f, 50.0f);
+//    ball.position = CGPointMake(50.0f, 50.0f);
+    ball.position = CGPointMake(startX, startY);
     ball.alpha = 1.0f;
     ball.physicsBody.angularVelocity = 0.0f;
     ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
@@ -340,23 +296,14 @@
     }
 }
 
+
 -(void)handlePinchFrom:(UIPinchGestureRecognizer *)recognizer {
     // reseta under utveckling
-    [self beginRound];
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        [self beginRound];
+    }
 }
 
-
-
-//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    NSLog(@"TouchesBegan-metoden");
-//    
-//    UITouch *touch = [touches anyObject];
-//    CGPoint location = [touch locationInView:self.view];
-//    
-//    if ([self.ball containsPoint:location]) {
-//        self.ballIsSelected = YES;
-//    }
-//}
 
 -(void)updateRoundTo:(int)newRound {
     SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
@@ -379,6 +326,8 @@
     
     SKNode *scoreHolderNode = [self childNodeWithName:@"scoreHolderNode"];
     SKLabelNode *scoreNode = [scoreHolderNode childNodeWithName:@"scoreNode"];
+    
+    NSLog(@"poängnodens namn: %@", scoreNode.name);
     
     NSString *scoreString;
     
