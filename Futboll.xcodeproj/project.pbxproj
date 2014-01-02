@@ -7,12 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7118564818678E96003D0911 /* defender@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7118564718678E96003D0911 /* defender@2x.png */; };
 		715642C3186B85BE0001D3A3 /* ballWithHolder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 715642C2186B85BE0001D3A3 /* ballWithHolder@2x.png */; };
-		715642D7186B933D0001D3A3 /* newFootball@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 715642D6186B933D0001D3A3 /* newFootball@2x.png */; };
 		715642DB186B9CA80001D3A3 /* goalBW@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 715642DA186B9CA80001D3A3 /* goalBW@2x.png */; };
-		7157A7BF18633D42005ECAD6 /* goal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7157A7BE18633D42005ECAD6 /* goal@2x.png */; };
-		7157A7C318639813005ECAD6 /* football@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7157A7C218639813005ECAD6 /* football@2x.png */; };
 		7187CC36185F19E000DFAE14 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7187CC35185F19E000DFAE14 /* Foundation.framework */; };
 		7187CC38185F19E000DFAE14 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7187CC37185F19E000DFAE14 /* CoreGraphics.framework */; };
 		7187CC3A185F19E000DFAE14 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7187CC39185F19E000DFAE14 /* UIKit.framework */; };
@@ -31,10 +27,7 @@
 		7187CC61185F19E100DFAE14 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7187CC39185F19E000DFAE14 /* UIKit.framework */; };
 		7187CC69185F19E100DFAE14 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7187CC67185F19E100DFAE14 /* InfoPlist.strings */; };
 		7187CC6B185F19E100DFAE14 /* BounceAgainTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7187CC6A185F19E100DFAE14 /* BounceAgainTests.m */; };
-		71CACBF4186467180073D9DF /* floorpattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 71CACBF3186467180073D9DF /* floorpattern@2x.png */; };
-		71CACBF6186468810073D9DF /* altFloorPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 71CACBF5186468810073D9DF /* altFloorPattern.png */; };
-		71D001071865F65300C68AE8 /* spikes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 71D001061865F65300C68AE8 /* spikes@2x.png */; };
-		71D001091866072600C68AE8 /* spikesAlternative@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 71D001081866072600C68AE8 /* spikesAlternative@2x.png */; };
+		71AB348818754A65006A2532 /* redDefender@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 71AB348718754A65006A2532 /* redDefender@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,12 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7118564718678E96003D0911 /* defender@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defender@2x.png"; sourceTree = "<group>"; };
 		715642C2186B85BE0001D3A3 /* ballWithHolder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ballWithHolder@2x.png"; sourceTree = "<group>"; };
-		715642D6186B933D0001D3A3 /* newFootball@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "newFootball@2x.png"; sourceTree = "<group>"; };
 		715642DA186B9CA80001D3A3 /* goalBW@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "goalBW@2x.png"; sourceTree = "<group>"; };
-		7157A7BE18633D42005ECAD6 /* goal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "goal@2x.png"; sourceTree = "<group>"; };
-		7157A7C218639813005ECAD6 /* football@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "football@2x.png"; sourceTree = "<group>"; };
 		7187CC32185F19E000DFAE14 /* Futboll.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Futboll.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7187CC35185F19E000DFAE14 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7187CC37185F19E000DFAE14 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -78,10 +67,7 @@
 		7187CC66185F19E100DFAE14 /* FutbollTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FutbollTests-Info.plist"; sourceTree = "<group>"; };
 		7187CC68185F19E100DFAE14 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7187CC6A185F19E100DFAE14 /* BounceAgainTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BounceAgainTests.m; sourceTree = "<group>"; };
-		71CACBF3186467180073D9DF /* floorpattern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "floorpattern@2x.png"; sourceTree = "<group>"; };
-		71CACBF5186468810073D9DF /* altFloorPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = altFloorPattern.png; sourceTree = "<group>"; };
-		71D001061865F65300C68AE8 /* spikes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "spikes@2x.png"; sourceTree = "<group>"; };
-		71D001081866072600C68AE8 /* spikesAlternative@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "spikesAlternative@2x.png"; sourceTree = "<group>"; };
+		71AB348718754A65006A2532 /* redDefender@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redDefender@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,16 +177,9 @@
 		71D001051865F2CB00C68AE8 /* ImageAssets */ = {
 			isa = PBXGroup;
 			children = (
+				71AB348718754A65006A2532 /* redDefender@2x.png */,
 				715642DA186B9CA80001D3A3 /* goalBW@2x.png */,
-				715642D6186B933D0001D3A3 /* newFootball@2x.png */,
 				715642C2186B85BE0001D3A3 /* ballWithHolder@2x.png */,
-				7118564718678E96003D0911 /* defender@2x.png */,
-				71D001081866072600C68AE8 /* spikesAlternative@2x.png */,
-				7157A7C218639813005ECAD6 /* football@2x.png */,
-				7157A7BE18633D42005ECAD6 /* goal@2x.png */,
-				71D001061865F65300C68AE8 /* spikes@2x.png */,
-				71CACBF5186468810073D9DF /* altFloorPattern.png */,
-				71CACBF3186467180073D9DF /* floorpattern@2x.png */,
 			);
 			name = ImageAssets;
 			sourceTree = "<group>";
@@ -281,20 +260,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71CACBF4186467180073D9DF /* floorpattern@2x.png in Resources */,
 				715642C3186B85BE0001D3A3 /* ballWithHolder@2x.png in Resources */,
-				71CACBF6186468810073D9DF /* altFloorPattern.png in Resources */,
-				71D001091866072600C68AE8 /* spikesAlternative@2x.png in Resources */,
-				7157A7BF18633D42005ECAD6 /* goal@2x.png in Resources */,
 				7187CC56185F19E000DFAE14 /* Spaceship.png in Resources */,
 				7187CC58185F19E000DFAE14 /* Images.xcassets in Resources */,
-				715642D7186B933D0001D3A3 /* newFootball@2x.png in Resources */,
 				7187CC4E185F19E000DFAE14 /* Main_iPad.storyboard in Resources */,
 				7187CC4B185F19E000DFAE14 /* Main_iPhone.storyboard in Resources */,
-				71D001071865F65300C68AE8 /* spikes@2x.png in Resources */,
-				7118564818678E96003D0911 /* defender@2x.png in Resources */,
-				7157A7C318639813005ECAD6 /* football@2x.png in Resources */,
 				7187CC42185F19E000DFAE14 /* InfoPlist.strings in Resources */,
+				71AB348818754A65006A2532 /* redDefender@2x.png in Resources */,
 				715642DB186B9CA80001D3A3 /* goalBW@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

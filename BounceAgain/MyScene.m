@@ -16,6 +16,7 @@
 @property int score;
 @property int round;
 
+@property int timeOfRound;
 @end
 
 @implementation MyScene
@@ -80,8 +81,8 @@
         scoreTitleNode.position = CGPointMake(0, 10);
         
         SKLabelNode *scoreNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
-        scoreNode.position = CGPointMake(0, -25);
-        scoreNode.fontSize = 40;
+        scoreNode.position = CGPointMake(0, -20);
+        scoreNode.fontSize = 30;
         scoreNode.name = @"scoreNode";
 //        scoreNode.text = @"-1";
         
@@ -89,19 +90,20 @@
         [scoreHolderNode addChild:scoreNode];
         [self addChild:scoreHolderNode];
         
-        // rounds
+        // tid kvar i omgång
         SKSpriteNode *roundHolderNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.0] size:CGSizeMake(75, 75)];
         roundHolderNode.position = CGPointMake(50, self.frame.size.height - 33);
         roundHolderNode.name = @"roundHolderNode";
         
         SKLabelNode *roundTitleNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
         roundTitleNode.fontSize = 15;
-        roundTitleNode.text = @"ROUND";
+        roundTitleNode.text = @"TIME";
         roundTitleNode.position = CGPointMake(0, 10);
         
         SKLabelNode *roundNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
-        roundNode.position = CGPointMake(0, -25);
-        roundNode.fontSize = 40;
+        roundNode.position = CGPointMake(-35, -20);
+        roundNode.fontSize = 30;
+        roundNode.horizontalAlignmentMode = 1;
         roundNode.name = @"roundNode";
 //        scoreNode.position = CGPointMake(100.0f, 100.0f);
         
@@ -193,14 +195,36 @@
         [goalContainer addChild:rightGoalPost];
         
         // försvarare
-        SKSpriteNode *defender = [SKSpriteNode spriteNodeWithImageNamed:@"defender"];
-        defender.xScale = 0.75f;
-        defender.yScale = defender.xScale;
-        defender.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender.frame.size.height / 2.0f + 7.0f];
-        defender.position = CGPointMake(200, 200);
-        defender.physicsBody.dynamic = NO;
-        defender.name = @"defender";
-        [self addChild:defender];
+        SKSpriteNode *defender1 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
+        defender1.xScale = 0.75f;
+        defender1.yScale = defender1.xScale;
+        defender1.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender1.frame.size.height / 2.0f + 7.0f];
+        defender1.position = CGPointMake(200, self.frame.size.height * 4.0 / 5.0 - 15);
+        defender1.physicsBody.dynamic = NO;
+        defender1.name = @"defender1";
+        [self addChild:defender1];
+        
+        SKSpriteNode *defender2 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
+        defender2.xScale = 0.75f;
+        defender2.yScale = defender2.xScale;
+        defender2.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender2.frame.size.height / 2.0f + 7.0f];
+        defender2.position = CGPointMake(100, self.frame.size.height * 3.0 / 5.0 - 15);
+        defender2.physicsBody.dynamic = NO;
+        defender2.name = @"defender2";
+        [self addChild:defender2];
+
+        SKSpriteNode *defender3 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
+        defender3.xScale = 0.75f;
+        defender3.yScale = defender3.xScale;
+        defender3.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender3.frame.size.height / 2.0f + 7.0f];
+        defender3.position = CGPointMake(100, self.frame.size.height * 2.0 / 5.0 - 15);
+        defender3.physicsBody.dynamic = NO;
+        defender3.name = @"defender3";
+        [self addChild:defender3];
+
+        
+        
+        
         
         
         // nod för meddelanden
@@ -213,17 +237,36 @@
         messageNode.alpha = 0.0;
         [self addChild:messageNode];
         
+        // timer för omgången
+//        NSTimer *roundTimer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
+        self.timeOfRound = 500;
         
 //        [self beginRound];
         
         [self updateScoreTo:0];
-        [self updateRoundTo:1];
-        [self displayMessage:@"Första rundan" forDuration:3];
+//        [self updateRoundTo:1];
+        [self displayMessage:@"Start" forDuration:1];
         
         
     }
     return self;
 }
+
+-(void)timerCountdown {
+//    NSLog(@"Countdown");
+    
+    SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
+    SKLabelNode *roundNode = [roundHolderNode childNodeWithName:@"roundNode"];
+//
+    self.timeOfRound -= 1;
+    
+    NSString *displayTime = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
+//    roundNode.text = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
+    roundNode.text = displayTime;
+    NSLog(displayTime);
+}
+
 
 // metod för start av omgång
 -(void)beginRound {
@@ -305,20 +348,22 @@
 }
 
 
--(void)updateRoundTo:(int)newRound {
-    SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
-    SKLabelNode *roundNode = [roundHolderNode childNodeWithName:@"roundNode"];
-    
-    NSString *roundString;
-    
-    if (newRound / 10 == 0) {
-        roundString = [NSString stringWithFormat:@"0%i", newRound];
-    } else {
-        roundString = [NSString stringWithFormat:@"%i", newRound];
-    }
-    
-    roundNode.text = roundString;
-}
+//-(void)updateRoundTo:(float)newTime {
+//    SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
+//    SKLabelNode *roundNode = [roundHolderNode childNodeWithName:@"roundNode"];
+//    
+////    NSString *roundString;
+////    
+////    if (newRound / 10 == 0) {
+////        roundString = [NSString stringWithFormat:@"0%i", newRound];
+////    } else {
+////        roundString = [NSString stringWithFormat:@"%i", newRound];
+////    }
+//    
+////    roundNode.text = roundString;
+//    
+//    roundNode.text = [NSString stringWithFormat:@"%f", newTime];
+//}
 
 
 -(void)updateScoreTo:(int)newScore {
@@ -370,7 +415,6 @@
     /* Called before each frame is rendered */
     
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
-    SKSpriteNode *defender = [self childNodeWithName:@"defender"];
     if (self.hasMadeShot && ABS(ball.physicsBody.velocity.dx) < 10.0f && ABS(ball.physicsBody.velocity.dy) < 10.0f) {
         NSLog(@"New round");
         [self beginRound];
@@ -413,16 +457,38 @@
 //    }
     
     // flytta defender
-    static float xDeltaDefender = 2.0f;
-    if (defender.position.x > self.frame.size.width * 0.9f) {
-        xDeltaDefender *= -1.0f;
-    } else if (defender.position.x < self.frame.size.width * 0.1f) {
-        xDeltaDefender *= -1.0f;
+    SKSpriteNode *defender1 = [self childNodeWithName:@"defender1"];
+    SKSpriteNode *defender2 = [self childNodeWithName:@"defender2"];
+    SKSpriteNode *defender3 = [self childNodeWithName:@"defender3"];
+    
+    static float xDeltaDefender1 = 2.0f;
+    static float xDeltaDefender2 = 3.0f;
+    static float xDeltaDefender3 = -1.5;
+
+    if (defender1.position.x > self.frame.size.width * 0.9f) {
+        xDeltaDefender1 *= -1.0f;
+    } else if (defender1.position.x < self.frame.size.width * 0.1f) {
+        xDeltaDefender1 *= -1.0f;
     }
     
+    defender1.position = CGPointMake(defender1.position.x + xDeltaDefender1, defender1.position.y);
     
-    defender.position = CGPointMake(defender.position.x + xDeltaDefender, defender.position.y);
+    if (defender2.position.x > self.frame.size.width * 0.9f) {
+        xDeltaDefender2 *= -1.0f;
+    } else if (defender2.position.x < self.frame.size.width * 0.1f) {
+        xDeltaDefender2 *= -1.0f;
+    }
     
+    defender2.position = CGPointMake(defender2.position.x + xDeltaDefender2, defender2.position.y);
+
+    if (defender3.position.x > self.frame.size.width * 0.9f) {
+        xDeltaDefender3 *= -1.0f;
+    } else if (defender3.position.x < self.frame.size.width * 0.1f) {
+        xDeltaDefender3 *= -1.0f;
+    }
+    
+    defender3.position = CGPointMake(defender3.position.x + xDeltaDefender3, defender3.position.y);
+
 }
 
 @end
