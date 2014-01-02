@@ -207,28 +207,28 @@
         defender1.xScale = 0.75f;
         defender1.yScale = defender1.xScale;
         defender1.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender1.frame.size.height / 2.0f + 7.0f];
-        defender1.position = CGPointMake(200, self.frame.size.height * 4.0 / 5.0 - 15);
+        defender1.position = CGPointMake(200, self.frame.size.height * 3.0 / 5.0 - 15);
         defender1.physicsBody.dynamic = NO;
         defender1.name = @"defender1";
         [self addChild:defender1];
         
-        SKSpriteNode *defender2 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
-        defender2.xScale = 0.75f;
-        defender2.yScale = defender2.xScale;
-        defender2.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender2.frame.size.height / 2.0f + 7.0f];
-        defender2.position = CGPointMake(100, self.frame.size.height * 3.0 / 5.0 - 15);
-        defender2.physicsBody.dynamic = NO;
-        defender2.name = @"defender2";
-        [self addChild:defender2];
+//        SKSpriteNode *defender2 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
+//        defender2.xScale = 0.75f;
+//        defender2.yScale = defender2.xScale;
+//        defender2.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender2.frame.size.height / 2.0f + 7.0f];
+//        defender2.position = CGPointMake(100, self.frame.size.height * 4.0 / 5.0 - 15);
+//        defender2.physicsBody.dynamic = NO;
+//        defender2.name = @"defender2";
+//        [self addChild:defender2];
 
-        SKSpriteNode *defender3 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
-        defender3.xScale = 0.75f;
-        defender3.yScale = defender3.xScale;
-        defender3.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender3.frame.size.height / 2.0f + 7.0f];
-        defender3.position = CGPointMake(100, self.frame.size.height * 2.0 / 5.0 - 15);
-        defender3.physicsBody.dynamic = NO;
-        defender3.name = @"defender3";
-        [self addChild:defender3];
+//        SKSpriteNode *defender3 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
+//        defender3.xScale = 0.75f;
+//        defender3.yScale = defender3.xScale;
+//        defender3.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender3.frame.size.height / 2.0f + 7.0f];
+//        defender3.position = CGPointMake(100, self.frame.size.height * 2.0 / 5.0 - 15);
+//        defender3.physicsBody.dynamic = NO;
+//        defender3.name = @"defender3";
+//        [self addChild:defender3];
 
         
         
@@ -241,7 +241,7 @@
         messageNode.verticalAlignmentMode = SKLabelVerticalAlignmentModeCenter;
         messageNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeCenter;
         messageNode.position = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height / 2.0 + 75.0);
-        messageNode.fontSize = 75;
+        messageNode.fontSize = 50;
         messageNode.alpha = 0.0;
         [self addChild:messageNode];
         
@@ -441,7 +441,10 @@
 
 -(void)goalWasScored {
     self.score += 1;
-    self.timeOfRound += 20;
+    if (self.round == 5) {
+        self.timeOfRound += 20;
+    }
+    
     [self updateScoreTo:self.score];
 }
 
@@ -478,7 +481,38 @@
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
     [ball removeFromParent];
     
-    [self displayMessage:[NSString stringWithFormat:@"Round %i", self.round] forDuration:1.5];
+    if (self.round == 6) {
+        [self gameOver];
+    } else if (self.round == 5) {
+        [self displayMessage:[NSString stringWithFormat:@"Final Round"] forDuration:1.5];
+    } else if (self.round == 2) {
+        SKSpriteNode *defender2 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
+        defender2.xScale = 0.75f;
+        defender2.yScale = defender2.xScale;
+        defender2.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender2.frame.size.height / 2.0f + 7.0f];
+        defender2.position = CGPointMake(100, self.frame.size.height * 4.0 / 5.0 - 15);
+        defender2.physicsBody.dynamic = NO;
+        defender2.name = @"defender2";
+        [self addChild:defender2];
+        
+        [self displayMessage:[NSString stringWithFormat:@"Round %i", self.round] forDuration:1.5];
+
+    } else if (self.round == 4) {
+        SKSpriteNode *defender3 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
+        defender3.xScale = 0.75f;
+        defender3.yScale = defender3.xScale;
+        defender3.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender3.frame.size.height / 2.0f + 7.0f];
+        defender3.position = CGPointMake(100, self.frame.size.height * 2.0 / 5.0 - 15);
+        defender3.physicsBody.dynamic = NO;
+        defender3.name = @"defender3";
+        [self addChild:defender3];
+
+        [self displayMessage:[NSString stringWithFormat:@"Round %i", self.round] forDuration:1.5];
+
+    } else {
+        [self displayMessage:[NSString stringWithFormat:@"Round %i", self.round] forDuration:1.5];
+
+    }
     
     [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(startNewRound) userInfo:nil repeats:NO];
     
@@ -490,6 +524,7 @@
 
     self.timerIsPaused = YES;
     self.timeOfRound = 300;
+    self.round = 1;
     
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
   
@@ -558,6 +593,28 @@
 //    }
     
     // flytta defender
+    float velocityFactor;
+    switch (self.round) {
+        case 1:
+            velocityFactor = 1.0;
+            break;
+        case 2:
+            velocityFactor = 1.0;
+            break;
+        case 3:
+            velocityFactor = 1.5;
+            break;
+        case 4:
+            velocityFactor = 1.5;
+            break;
+        case 5:
+            velocityFactor = 2.0;
+            break;
+        default:
+            velocityFactor = 1.0;
+            break;
+    }
+    
     SKSpriteNode *defender1 = [self childNodeWithName:@"defender1"];
     SKSpriteNode *defender2 = [self childNodeWithName:@"defender2"];
     SKSpriteNode *defender3 = [self childNodeWithName:@"defender3"];
@@ -572,7 +629,7 @@
         xDeltaDefender1 *= -1.0f;
     }
     
-    defender1.position = CGPointMake(defender1.position.x + xDeltaDefender1, defender1.position.y);
+    defender1.position = CGPointMake(defender1.position.x + xDeltaDefender1 * velocityFactor, defender1.position.y);
     
     if (defender2.position.x > self.frame.size.width * 0.9f) {
         xDeltaDefender2 *= -1.0f;
@@ -580,7 +637,7 @@
         xDeltaDefender2 *= -1.0f;
     }
     
-    defender2.position = CGPointMake(defender2.position.x + xDeltaDefender2, defender2.position.y);
+    defender2.position = CGPointMake(defender2.position.x + xDeltaDefender2 * velocityFactor, defender2.position.y);
 
     if (defender3.position.x > self.frame.size.width * 0.9f) {
         xDeltaDefender3 *= -1.0f;
@@ -588,7 +645,7 @@
         xDeltaDefender3 *= -1.0f;
     }
     
-    defender3.position = CGPointMake(defender3.position.x + xDeltaDefender3, defender3.position.y);
+    defender3.position = CGPointMake(defender3.position.x + xDeltaDefender3 * velocityFactor, defender3.position.y);
 
 }
 
