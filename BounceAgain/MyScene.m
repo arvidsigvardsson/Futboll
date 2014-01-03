@@ -104,7 +104,7 @@
         roundTitleNode.position = CGPointMake(0, 10);
         
         SKLabelNode *roundNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
-        roundNode.position = CGPointMake(-27, -20);
+        roundNode.position = CGPointMake(-30, -20);
         roundNode.fontSize = 30;
         roundNode.horizontalAlignmentMode = 1;
         roundNode.text = @"0.0";
@@ -182,7 +182,7 @@
         SKSpriteNode *goalImageSprite = [SKSpriteNode spriteNodeWithImageNamed:@"goalBW"];
         goalImageSprite.xScale = 0.65f;
         goalImageSprite.yScale = goalImageSprite.xScale;
-        goalImageSprite.zPosition = 1;
+        goalImageSprite.zPosition = 0.5;
         [goalContainer addChild:goalImageSprite];
         
         // noder för stolpar
@@ -258,6 +258,10 @@
 ////        [self updateRoundTo:1];
 //        [self displayMessage:@"Start" forDuration:1];
         
+        
+        
+        ////// test //////
+//        [self gameOver];
         
     }
     return self;
@@ -350,10 +354,10 @@
     [[self view] addGestureRecognizer:panGestureRecognizer];
     
     // för att reseta under utveckling
-    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchFrom:)];
-    [[self view] addGestureRecognizer:pinchGestureRecognizer];
-    
-    NSLog(@"didMoveToView-metoden");
+//    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchFrom:)];
+//    [[self view] addGestureRecognizer:pinchGestureRecognizer];
+//    
+//    NSLog(@"didMoveToView-metoden");
     
 //    UIScreenEdgePanGestureRecognizer = [[UIScreenEdgePanGestureRecognizer ]
 	
@@ -392,14 +396,14 @@
     }
 }
 
-
+/*
 -(void)handlePinchFrom:(UIPinchGestureRecognizer *)recognizer {
     // reseta under utveckling
     if (recognizer.state == UIGestureRecognizerStateEnded) {
         [self resetBall];
     }
 }
-
+*/
 
 //-(void)updateRoundTo:(float)newTime {
 //    SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
@@ -514,17 +518,28 @@
 
     }
     
-    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(startNewRound) userInfo:nil repeats:NO];
-    
+    if (self.round != 6) {
+        [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(startNewRound) userInfo:nil repeats:NO];
+    }
     
 }
 
 
 -(void)gameStart {
 
+    SKNode *gameOverNode = [self childNodeWithName:@"gameOverNode"];
+    [gameOverNode removeFromParent];
+    
     self.timerIsPaused = YES;
     self.timeOfRound = 300;
     self.round = 1;
+    self.score = 0;
+    
+    SKSpriteNode *defender2 = [self childNodeWithName:@"defender2"];
+    [defender2 removeFromParent];
+    
+    SKSpriteNode *defender3 = [self childNodeWithName:@"defender3"];
+    [defender3 removeFromParent];
     
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
   
@@ -538,6 +553,44 @@
 }
 
 -(void)gameOver {
+    
+    self.timerIsPaused = YES;
+    
+    SKNode *ball = [self childNodeWithName:@"ball"];
+    [ball removeFromParent];
+    
+    SKSpriteNode *gameOverNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithWhite:1.0 alpha:0.9] size:self.frame.size];
+    gameOverNode.position = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height / 2.0);
+    gameOverNode.zPosition = 1;
+    gameOverNode.name = @"gameOverNode";
+    
+    SKLabelNode *gameOverMessageNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
+    gameOverMessageNode.text = @"GAME OVER";
+    gameOverMessageNode.fontColor = [UIColor redColor];
+    gameOverMessageNode.fontSize = 48;
+    gameOverMessageNode.position = CGPointMake(0, 75);
+    
+    SKLabelNode *finalScoreNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
+    finalScoreNode.text = [NSString stringWithFormat:@"Final score is %i", self.score];
+    finalScoreNode.fontSize = 32;
+    finalScoreNode.position = CGPointMake(0, -50);
+    finalScoreNode.fontColor = [UIColor blackColor];
+    
+    SKLabelNode *gameRestartNode = [SKLabelNode labelNodeWithFontNamed:@"Futura Medium"];
+    gameRestartNode.text = @"Game will start over soon";
+    gameRestartNode.fontSize = 24;
+    gameRestartNode.fontColor = [UIColor blackColor];
+    gameRestartNode.position = CGPointMake(0, -150);
+    
+    [gameOverNode addChild:gameOverMessageNode];
+    [gameOverNode addChild:finalScoreNode];
+    [gameOverNode addChild:gameRestartNode];
+    
+    [self addChild:gameOverNode];
+    
+    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(gameStart) userInfo:nil repeats:NO];
+
+    
     
 }
 
