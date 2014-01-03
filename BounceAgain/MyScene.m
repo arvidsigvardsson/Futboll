@@ -26,10 +26,10 @@
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
         /* Setup your scene here */
-    
-        self.score = 0;
-        self.round = 1;
         
+        //
+        //      initWithSize-metoden genererar bakgrund och spelplan, samt vissa andra element typ mål
+        //
         
         // bakgrund och spelplan
         self.backgroundColor = [SKColor colorWithRed:255.0/255.0f green:134.0/255.0f blue:25.0/255.0f alpha:1];
@@ -143,35 +143,12 @@
         self.physicsBody = borderBody;
         
         
-        // friktion, ************  ska nog ändras ********************
+        // friktion,
         self.physicsBody.friction = 1.0f;
-
-        
-//        // initiera en boll
-//        SKSpriteNode *ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
-//        ball.xScale = 0.75f;
-//        ball.yScale = ball.xScale;
-//        ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
-//        [ball setName:@"ball"];
-//        
-//        // ge bollen en physicsbody
-//        ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:23.0f];
-//        ball.physicsBody.dynamic = YES;
-//        ball.physicsBody.affectedByGravity = NO;
-//        ball.physicsBody.restitution = 0.17;
-//        ball.physicsBody.friction = 1.0;
-//        
-//        // bollen är ej ännu selected
-//        self.ballIsSelected = NO;
-//        
-//        [self addChild:ball];
-        
-        
-
         
         // hållare för målet, skall inkludera en bild av målet, samt ett antal child nodes med physicsbodies för att simulera ett mål
         
-        float alphaOfGoalNodes = 0.0f; // testing
+        float alphaOfGoalNodes = 0.0f; // testing, skall vara = 0.0 i färdig app
         
         SKSpriteNode *goalContainer = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithRed:0 green:0 blue:1.0f alpha:0.0f] size:CGSizeMake(150, 100)];
         goalContainer.position = CGPointMake(self.frame.size.width / 2.0f, self.frame.size.height - 30);
@@ -202,7 +179,7 @@
         rightGoalPost.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:rightGoalPost.path];
         [goalContainer addChild:rightGoalPost];
         
-        // försvarare
+        // en defender skapas här, de två andra i end OfRound-metoden, då de inte ska vara med i första leveln
         SKSpriteNode *defender1 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
         defender1.xScale = 0.75f;
         defender1.yScale = defender1.xScale;
@@ -211,25 +188,6 @@
         defender1.physicsBody.dynamic = NO;
         defender1.name = @"defender1";
         [self addChild:defender1];
-        
-//        SKSpriteNode *defender2 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
-//        defender2.xScale = 0.75f;
-//        defender2.yScale = defender2.xScale;
-//        defender2.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender2.frame.size.height / 2.0f + 7.0f];
-//        defender2.position = CGPointMake(100, self.frame.size.height * 4.0 / 5.0 - 15);
-//        defender2.physicsBody.dynamic = NO;
-//        defender2.name = @"defender2";
-//        [self addChild:defender2];
-
-//        SKSpriteNode *defender3 = [SKSpriteNode spriteNodeWithImageNamed:@"redDefender"];
-//        defender3.xScale = 0.75f;
-//        defender3.yScale = defender3.xScale;
-//        defender3.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:defender3.frame.size.height / 2.0f + 7.0f];
-//        defender3.position = CGPointMake(100, self.frame.size.height * 2.0 / 5.0 - 15);
-//        defender3.physicsBody.dynamic = NO;
-//        defender3.name = @"defender3";
-//        [self addChild:defender3];
-
         
         
         
@@ -245,24 +203,6 @@
         messageNode.alpha = 0.0;
         [self addChild:messageNode];
         
-        // timer för omgången
-//        NSTimer *roundTimer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
-//        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
-//        self.timeOfRound = 50;
-//        
-//        self.timerIsPaused = YES;
-//        
-////        [self beginRound];
-//        
-//        [self updateScoreTo:0];
-////        [self updateRoundTo:1];
-//        [self displayMessage:@"Start" forDuration:1];
-        
-        
-        
-        ////// test //////
-//        [self gameOver];
-        
     }
     return self;
 }
@@ -273,7 +213,6 @@
     SKSpriteNode *ball = [SKSpriteNode spriteNodeWithImageNamed:@"ballWithHolder"];
     ball.xScale = 0.75f;
     ball.yScale = ball.xScale;
-//    ball.alpha = 0.0f; // metoden beginRound gör bollen synlig och ger den en position
     [ball setName:@"ball"];
     
     // ge bollen en physicsbody
@@ -296,7 +235,9 @@
 
 
 -(void)timerCountdown {
-//    NSLog(@"Countdown");
+    
+    //      räknar ner tiden i en omgång. Timern avfyrar kontinuerligt, propertien timerIsPaused styr om tiden ska räknas ner. Är pausat mellan omgångar
+    
     if (!self.timerIsPaused) {
         SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
         SKLabelNode *roundNode = [roundHolderNode childNodeWithName:@"roundNode"];
@@ -309,10 +250,8 @@
         } else {
             displayTime = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
         }
-    //    roundNode.text = [NSString stringWithFormat:@"%i.%i", self.timeOfRound / 10, self.timeOfRound % 10];
+   
         roundNode.text = displayTime;
-    //    NSLog(displayTime);
-        
         
         if (self.timeOfRound == 0) {
             self.timerIsPaused = YES;
@@ -322,21 +261,22 @@
 }
 
 
-// metod för start av omgång
+
 -(void)resetBall {
-    NSLog(@"beginRound");
+   
+    //      placerar bollen i målområdet
+    
     
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
     // se till att spelaren kan skjuta bollen
     self.hasMadeShot = NO;
     
+    // slumpvis punkt
     float startX = arc4random_uniform(self.frame.size.width - 50.0) + 25.0;
     float startY = arc4random_uniform(25.0) + 50.0;
     // initera bollen i nedre målområdet
     
-    //NSLog(@"lowergoalareaposition = %f, %f", [lower)
     
-//    ball.position = CGPointMake(50.0f, 50.0f);
     ball.position = CGPointMake(startX, startY);
     ball.alpha = 1.0f;
     ball.physicsBody.angularVelocity = 0.0f;
@@ -353,15 +293,9 @@
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];
     [[self view] addGestureRecognizer:panGestureRecognizer];
     
-    // för att reseta under utveckling
-//    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchFrom:)];
-//    [[self view] addGestureRecognizer:pinchGestureRecognizer];
-//    
-//    NSLog(@"didMoveToView-metoden");
     
-//    UIScreenEdgePanGestureRecognizer = [[UIScreenEdgePanGestureRecognizer ]
-	
-	// starta spelet
+	// starta spelet efter att panGestureRecognizer är initierad
+    
     [self gameStart];
     //  [self resetBall];
     
@@ -396,32 +330,6 @@
     }
 }
 
-/*
--(void)handlePinchFrom:(UIPinchGestureRecognizer *)recognizer {
-    // reseta under utveckling
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        [self resetBall];
-    }
-}
-*/
-
-//-(void)updateRoundTo:(float)newTime {
-//    SKNode *roundHolderNode = [self childNodeWithName:@"roundHolderNode"];
-//    SKLabelNode *roundNode = [roundHolderNode childNodeWithName:@"roundNode"];
-//    
-////    NSString *roundString;
-////    
-////    if (newRound / 10 == 0) {
-////        roundString = [NSString stringWithFormat:@"0%i", newRound];
-////    } else {
-////        roundString = [NSString stringWithFormat:@"%i", newRound];
-////    }
-//    
-////    roundNode.text = roundString;
-//    
-//    roundNode.text = [NSString stringWithFormat:@"%f", newTime];
-//}
-
 
 -(void)updateScoreTo:(int)newScore {
     NSLog(@"score = %i", newScore);
@@ -444,6 +352,9 @@
 }
 
 -(void)goalWasScored {
+    
+    //      hanterar att det blivit mål
+    
     self.score += 1;
     if (self.round == 5) {
         self.timeOfRound += 20;
@@ -453,9 +364,11 @@
 }
 
 -(void)displayMessage:(NSString *)message forDuration:(NSTimeInterval)duration {
+    
+    //      för att visa meddelanden ovanför spelgrafiken
+    
     SKLabelNode *messageNode = [self childNodeWithName:@"messageNode"];
     messageNode.text = message;
-//    messageNode.alpha = 1.0;
     
     SKAction *fadeAction = [SKAction sequence:@[
                                           [SKAction fadeInWithDuration:0.1],
@@ -468,7 +381,9 @@
 
 
 -(void)startNewRound {
-    // startar ny omgång
+    
+    //      startar ny omgång
+    
     self.timerIsPaused = NO;
     [self createBall];
     [self resetBall];
@@ -476,7 +391,8 @@
 
 
 -(void)endOfRound {
-    // avslutar omgång
+    
+    //      avslutar omgång, lägger till nya defenders, pausar spelet kort
 
     self.round += 1;
     self.timeOfRound = 300;
@@ -527,6 +443,8 @@
 
 -(void)gameStart {
 
+    //      ställer in spelproperties som round och score, tar bort gameOver-meddelandet om spelaren redan spelat en omgång, samt pausar spelet kort
+    
     SKNode *gameOverNode = [self childNodeWithName:@"gameOverNode"];
     [gameOverNode removeFromParent];
     
@@ -544,7 +462,6 @@
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
   
     [self updateScoreTo:0];
-    //        [self updateRoundTo:1];
     [self displayMessage:@"Round 1" forDuration:2.5];
     
     [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(startNewRound) userInfo:nil repeats:NO];
@@ -553,6 +470,8 @@
 }
 
 -(void)gameOver {
+    
+    //      hanterar när spelet tagit slut, lägger på ett meddelande över skärmen, pausar spelet, och startar om via gameStart-
     
     self.timerIsPaused = YES;
     
@@ -597,26 +516,18 @@
 
 
 -(void)update:(CFTimeInterval)currentTime {
-    
-    // testing
-//    NSLog(@"ball velocity:  dx = %f     dy = %f", self.ball.physicsBody.velocity.dx, self.ball.physicsBody.velocity.dy);
-    
+   
     /* Called before each frame is rendered */
+    
+    //      update-metoden gör rutinkontroller på om bollen gått i mål, flyttar defenders, och kontrollerar om bollen stannat, och resetar den då
+    
+    
     
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
     if (self.hasMadeShot && ABS(ball.physicsBody.velocity.dx) < 15.0f && ABS(ball.physicsBody.velocity.dy) < 15.0f) {
         NSLog(@"New round");
         [self resetBall];
     }
-    
-    
-    
-    // detektera mål
-//    if ([self.ballRegistrationNode intersectsNode:self.goalRegistrationNode]) {
-//        NSLog(@"Mål!");
-//        self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
-//        self.ball.physicsBody.angularVelocity = 0;
-//    }
 
     if (ball.position.y > self.frame.size.height) {
         NSLog(@"Mål!");
@@ -631,21 +542,13 @@
     
     
     // hindra bollen från att få för stor rotation
-//    NSLog(@"Ang vel = %f", self.ball.physicsBody.angularVelocity);
     if (ball.physicsBody.angularVelocity > 7.0f){
         ball.physicsBody.angularVelocity = 7.0f;
     } else if (ball.physicsBody.angularVelocity < -7.0f){
         ball.physicsBody.angularVelocity = -7.0f;
     }
     
-    // detektera kollision med spikesnode
-//    if ([self.ball intersectsNode:self.spikesNode]) {
-//        self.ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
-//        SKAction *fadeAction =[SKAction fadeOutWithDuration:0.1];
-//        [self.ball runAction:fadeAction];
-//    }
-    
-    // flytta defender
+    // flytta defender, beronde på omgång
     float velocityFactor;
     switch (self.round) {
         case 1:
