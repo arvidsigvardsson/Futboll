@@ -203,6 +203,13 @@
         messageNode.alpha = 0.0;
         [self addChild:messageNode];
         
+        // sätter igång omgångstimern, men sätter pausproperien till YES eftersom spelet inte startar direkt
+        self.timerIsPaused = YES;
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
+
+        
+        
+        
     }
     return self;
 }
@@ -459,7 +466,7 @@
     SKSpriteNode *defender3 = [self childNodeWithName:@"defender3"];
     [defender3 removeFromParent];
     
-    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
+//    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(timerCountdown) userInfo:nil repeats:YES];
   
     [self updateScoreTo:0];
     [self displayMessage:@"Round 1" forDuration:2.5];
