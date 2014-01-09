@@ -19,6 +19,8 @@
 @property int timeOfRound;
 @property bool timerIsPaused;
 
+@property int durationOfShot;
+
 @end
 
 @implementation MyScene
@@ -260,6 +262,21 @@
    
         roundNode.text = displayTime;
         
+        // durationOfShot räknar bara upp om bollen går utanför målområdet
+        SKSpriteNode *ball = [self childNodeWithName:@"ball"];
+        SKNode *lowerGoalAreaNode = [self childNodeWithName:@"lowerGoalAreaNode"];
+        
+        if ([lowerGoalAreaNode containsPoint:ball.position]) {
+            self.durationOfShot = 0;
+        } else {
+            self.durationOfShot += 1;
+        }
+        
+        
+        if(self.hasMadeShot) {
+            self.durationOfShot += 1;
+        }
+        
         if (self.timeOfRound == 0) {
             self.timerIsPaused = YES;
             [self endOfRound];
@@ -277,6 +294,7 @@
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
     // se till att spelaren kan skjuta bollen
     self.hasMadeShot = NO;
+    self.durationOfShot = 0;
     
     // slumpvis punkt
     float startX = arc4random_uniform(self.frame.size.width - 50.0) + 25.0;
@@ -304,6 +322,9 @@
 	// starta spelet efter att panGestureRecognizer är initierad
     
     [self gameStart];
+    
+    // testning
+//    [self gameStartDev];
     //  [self resetBall];
     
 }
@@ -323,6 +344,8 @@
             self.ballIsSelected = YES;
             self.originalBallPosition = touchLocation;
             
+            // ny funktion, begränsa hur långt ett skott är
+            self.durationOfShot = 0;
         }
         
     }
@@ -476,6 +499,7 @@
     
 }
 
+
 -(void)gameOver {
     
     //      hanterar när spelet tagit slut, lägger på ett meddelande över skärmen, pausar spelet, och startar om via gameStart-
@@ -529,10 +553,21 @@
     //      update-metoden gör rutinkontroller på om bollen gått i mål, flyttar defenders, och kontrollerar om bollen stannat, och resetar den då
     
     
-    
     SKSpriteNode *ball = [self childNodeWithName:@"ball"];
-    if (self.hasMadeShot && ABS(ball.physicsBody.velocity.dx) < 15.0f && ABS(ball.physicsBody.velocity.dy) < 15.0f) {
+    SKNode *lowerGoalAreaNode = [self childNodeWithName:@"lowerGoalAreaNode"];
+    
+    // villkor för om bollen ska resetas
+    BOOL ballHasLeftGoalArea = ![lowerGoalAreaNode containsPoint:ball.position];
+//    BOOL ballHasLowVelocity;
+//    if(ABS(ball.physicsBody.velocity.dx) < 15.0f && ABS(ball.physicsBody.velocity.dy)) {
+//        ballHasLowVelocity = YES;
+//    } else {
+//        ballHasLowVelocity = NO;
+//    }
+    
+    if (self.hasMadeShot && ballHasLeftGoalArea && self.durationOfShot > 30) {
         NSLog(@"New round");
+        self.durationOfShot = 0;
         [self resetBall];
     }
 
@@ -540,6 +575,7 @@
         NSLog(@"Mål!");
         [self displayMessage:@"Goal!" forDuration:1];
         
+        [self resetBall];
         ball.physicsBody.velocity = CGVectorMake(0.0f, 0.0f);
         ball.physicsBody.angularVelocity = 0;
         [self goalWasScored];
@@ -610,6 +646,9 @@
     
     defender3.position = CGPointMake(defender3.position.x + xDeltaDefender3 * velocityFactor, defender3.position.y);
 
+    
+    NSLog(@"Duration of shot = %i", self.durationOfShot);
+    
 }
 
 @end
